@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# AI Crawlers & LLM Indexing Permissions
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Machine-Readable AI Context
+# https://llmstxt.org/
+LLM-Text: https://steak-house-verandah.vercel.app/llms.txt
+LLM-Full-Text: https://steak-house-verandah.vercel.app/llms-full.txt
+
+Sitemap: https://steak-house-verandah.vercel.app/sitemap.xml
