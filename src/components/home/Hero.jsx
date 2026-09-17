@@ -105,13 +105,13 @@ export default function Hero({ onOpenWizard }) {
               {/* Floating Culinary Highlight Tag 1 */}
               <div className="absolute -top-3 sm:top-2 -left-2 sm:-left-6 px-4 py-2.5 rounded-2xl bg-[#142a20]/95 backdrop-blur-md border border-[#c5a059]/60 shadow-xl flex items-center space-x-2.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#c5a059] animate-pulse" />
-                <span className="text-xs sm:text-sm font-semibold text-[#f7f4ec]">28-Day Dry-Aged Ribeye</span>
+                <span className="text-xs sm:text-sm font-semibold text-[#f7f4ec]">16oz USDA Sizzling Ribeye</span>
               </div>
 
               {/* Floating Highlight Tag 2 */}
               <div className="absolute -bottom-4 sm:bottom-4 -right-2 sm:-right-6 px-4 py-2.5 rounded-2xl bg-[#142a20]/95 backdrop-blur-md border border-[#284d3b] shadow-xl flex items-center space-x-2.5">
                 <Utensils className="w-4 h-4 text-[#c5a059]" />
-                <span className="text-xs sm:text-sm font-semibold text-[#f7f4ec]">Scotch Bonnet Butter</span>
+                <span className="text-xs sm:text-sm font-semibold text-[#f7f4ec]">Broiled "Meat Butter" Marrow</span>
               </div>
             </div>
           </div>

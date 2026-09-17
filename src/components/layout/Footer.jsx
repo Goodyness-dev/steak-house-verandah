@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, MapPin, ChevronRight, Utensils, Mail, Clock } from '../common/Icons';
+import { Phone, MapPin, ChevronRight, Utensils, Mail, Clock, VerandahLogo } from '../common/Icons';
 import { BUSINESS_INFO } from '../../data/businessData';
 
 export default function Footer({ onOpenWizard, onNavigate }) {
@@ -59,8 +59,8 @@ export default function Footer({ onOpenWizard, onNavigate }) {
         {/* Brand */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-[#142a20] border border-[#c5a059] flex items-center justify-center">
-              <Utensils className="w-5 h-5 text-[#c5a059]" />
+            <div className="w-10 h-10 rounded-xl bg-[#142a20] border border-[#c5a059] flex items-center justify-center p-1.5">
+              <VerandahLogo className="w-6 h-6 text-[#c5a059]" />
             </div>
             <div>
               <span className="font-serif-luxury font-bold text-white text-base block">

@@ -16,8 +16,11 @@ export const imageManifest = {
     fusion: '/images/dish-fusion.jpg',
     ribeye: '/images/dish-ribeye.jpg',
     dessert: '/images/dish-dessert.jpg',
-    cocktail: '/images/cocktail-rum.jpg',
-    wine: '/images/wine-cellar.jpg'
+    cocktail: '/images/cocktail-steakhouse-brew.jpg',
+    wine: '/images/wine-cellar.jpg',
+    boneMarrow: '/images/dish-bone-marrow.jpg',
+    crabLobster: '/images/dish-crab-lobster.jpg',
+    steakhouseBrew: '/images/cocktail-steakhouse-brew.jpg'
   },
   venue: {
     terrace: '/images/verandah-terrace.jpg',

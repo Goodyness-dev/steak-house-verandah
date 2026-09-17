@@ -11,7 +11,8 @@ import {
   Phone,
   ArrowRight,
   ArrowLeft,
-  MapPin
+  MapPin,
+  VerandahLogo
 } from '../common/Icons';
 import { BUSINESS_INFO } from '../../data/businessData';
 import { SEATING_AREAS, DINING_OCCASIONS } from '../../data/makesData';
@@ -22,12 +23,12 @@ const TIME_SLOTS = [
 ];
 
 const CULINARY_HIGHLIGHTS = [
-  { id: 'tomahawk', label: '38oz Prime Dry-Aged Tomahawk', desc: 'Himalayan salt-aged 45 days' },
-  { id: 'ribeye', label: '16oz USDA Prime Ribeye', desc: 'Scotch bonnet chimichurri finish' },
-  { id: 'tenderloin', label: 'Blue Mountain Coffee Tenderloin', desc: 'Truffled potato puree & port reduction' },
-  { id: 'lobster', label: 'Caribbean Rock Lobster Tail', desc: 'Charred garlic escovitch butter' },
-  { id: 'tasting', label: "Verandah Chef's 5-Course Tasting", desc: 'Curated wine pairing available' },
-  { id: 'wine', label: 'Sommelier Wine Cellar Flight', desc: 'Vintage selections & reserve rum' },
+  { id: 'ribeye', label: '16oz USDA Prime Ribeye ($17,000 JMD)', desc: 'Sizzling skillet · Classic, Chimichurri or Country Style' },
+  { id: 'filet', label: 'Grass Fed 8oz Filet ($9,000 JMD)', desc: 'Tenderloin grilled to liking with clarified butter' },
+  { id: 'marrow', label: 'Scotch Bonnet "Meat Butter" Marrow ($3,000 JMD)', desc: 'Canoe-cut broiled marrow with breadfruit tostones' },
+  { id: 'crab', label: 'Stuffed Local Crab Backs ($4,700 JMD)', desc: 'Norma Shirley heritage classic with Solomon Gundy aioli' },
+  { id: 'lobster', label: 'Lobster in Callaloo Thermidor ($8,600 JMD)', desc: 'Fresh local lobster, callaloo béchamel & croissant gratin' },
+  { id: 'brew', label: 'Steakhouse Brew & Rum Cellar Flight ($1,500 JMD)', desc: 'Jamaican red rum, mezcal, passion fruit & vintage pours' },
 ];
 
 export default function QuoteWizardModal({ isOpen, onClose }) {
@@ -88,8 +89,8 @@ export default function QuoteWizardModal({ isOpen, onClose }) {
         {/* Header Bar */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-[#c5a059]/20 bg-[#142a20]/60">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#183327] border border-[#c5a059]/40 flex items-center justify-center text-[#c5a059]">
-              <Utensils className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-full bg-[#183327] border border-[#c5a059]/40 flex items-center justify-center text-[#c5a059] p-1.5">
+              <VerandahLogo className="w-6 h-6 text-[#c5a059]" />
             </div>
             <div>
               <h2 className="font-serif text-lg font-bold tracking-wide text-white">

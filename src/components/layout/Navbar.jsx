@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Phone, Menu, X, ChevronRight, Sun, Moon, Utensils } from '../common/Icons';
+import { Phone, Menu, X, ChevronRight, Sun, Moon, VerandahLogo } from '../common/Icons';
 import { BUSINESS_INFO, isOpenNow } from '../../data/businessData';
 
 export default function Navbar({ onOpenWizard, currentPage = 'home', onNavigate, darkMode, onToggleDarkMode }) {
@@ -65,10 +65,8 @@ export default function Navbar({ onOpenWizard, currentPage = 'home', onNavigate,
           className="flex items-center space-x-3.5 group cursor-pointer"
           aria-label="The Steak House on The Verandah - Back to Top"
         >
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-[#c5a059] to-[#9d7a36] p-0.5 shadow-md flex items-center justify-center transition group-hover:scale-105">
-            <div className="w-full h-full bg-[#0d1e16] rounded-[14px] flex items-center justify-center">
-              <Utensils className="w-6 h-6 text-[#c5a059]" />
-            </div>
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#142a20] border-2 border-[#c5a059] p-1.5 shadow-md flex items-center justify-center transition group-hover:scale-105">
+            <VerandahLogo className="w-8 h-8 text-[#c5a059]" />
           </div>
           <div className="flex flex-col">
             <span className="font-serif-luxury text-lg sm:text-xl font-bold tracking-tight text-[#f7f4ec] group-hover:text-[#c5a059] transition">

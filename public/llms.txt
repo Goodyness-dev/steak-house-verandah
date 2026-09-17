@@ -1,23 +1,30 @@
 # The Steak House on The Verandah
-> Historic Devon House, 26 Hope Road, Kingston 10, Jamaica | (876) 616-8831 | reservations@steakhouseja.com
+> Historic Devon House, 26 Hope Road, Kingston 10, Jamaica | (876) 616-8831 | reservations@steakhouseja.com | https://steak-house-verandah.vercel.app
 
 ## Overview
-The Steak House on The Verandah is Kingston, Jamaica's premier fine-dining chophouse, situated directly on the iconic colonial verandah of George Stiebel's 1881 Devon House estate. It combines Himalayan salt dry-aged USDA Prime and Wagyu steaks with Caribbean ocean specialties, authentic Jamaican culinary infusions, and an extensive vintage wine and rum cellar.
+The Steak House on The Verandah is Kingston, Jamaica's landmark chophouse, nestled on the colonial verandah of George Stiebel's 1881 Devon House estate. Known for prime steaks served with classic, chimichurri, or Jamaican country-style scotch bonnet rubs, the famous broiled "Meat Butter" bone marrow, Norma Shirley legacy stuffed crab backs, local lobster in callaloo thermidor, and estate craft rum cocktails.
 
 ## Key Information
-- Location: Devon House, 26 Hope Road, Suite 1, Kingston 10, Jamaica
+- Location: Devon House, 26 Hope Road, Kingston 10, Jamaica
 - Coordinates: 18.0148763, -76.7898652
-- Phone: +1 876-616-8831 / +1 876-403-6249
-- Cuisine: Fine Dining Chophouse, Himalayan Dry-Aged Steaks, Caribbean Fusion, Seafood
+- Phone: +1 (876) 616-8831 | Secondary: +1 (876) 403-6249
+- Cuisine: Chophouse, Prime Steaks, Jamaican Fusion, Caribbean Seafood, Craft Rum Bar
 - Operating Hours:
-  - Tuesday – Saturday: 11:30 AM – 10:00 PM
+  - Tuesday – Saturday: 11:30 AM – 10:00 PM (Lunch, Dinner, Bar)
   - Sunday: 12:00 PM – 9:00 PM
-  - Monday: Closed
-- Reservations: Recommended via online concierge or direct telephone.
+  - Monday: Closed for private cellar curation
+- Pricing Currency: Jamaican Dollars (JMD). Prices attract 15% GCT & 10% service charge.
 
-## Signature Offerings
-- 38oz Prime Dry-Aged Tomahawk Ribeye (45-day Himalayan salt aged)
-- Blue Mountain Coffee-Crusted Filet Mignon
-- Charred Caribbean Rock Lobster Tail with escovitch butter
-- Handcrafted Truffle Fettuccine with aged parmesan crisp
-- Devon House Heritage Rum flights and Old World Bordeaux reserve cellar
+## Authentic Signature Offerings & Pricing
+- 16 oz USDA Prime Ribeye (Bone-In / Boneless): $17,000 JMD (sizzling cast iron skillet)
+- 16 oz USDA T-Bone: $17,000 JMD
+- 12 oz USDA NY Strip: $11,500 JMD
+- Grass Fed 8 oz Filet Mignon: $9,000 JMD
+- Scotch Bonnet Bone Marrow ("Meat Butter"): $3,000 JMD (canoe-cut broiled beef bone marrow with breadfruit tostones)
+- Stuffed Local Crab Backs: $4,700 JMD (historic Norma Shirley heritage classic with Solomon Gundy aioli)
+- Lobster in Callaloo Thermidor: $8,600 JMD (local rock lobster baked in callaloo béchamel & croissant gratin)
+- Grilled Lobster with Clarified Butter: $8,000 JMD
+- Jamaican Fuzion Pastas: $3,500 – $5,000 JMD (Coconut Scotch Bonnet Cream, Callaloo Cream, Smoked Herring Cream)
+- Steakhouse Brew Craft Cocktail: $1,500 JMD (Red rum, mezcal, passion fruit, fresh citrus)
+- Famous Devon House Ice Cream: $1,500 JMD
+- Rum Cake à la Mode: $1,900 JMD (soaked in Jamaica's finest aged reserve rum)
