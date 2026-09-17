@@ -1,167 +1,275 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  SERVICES, 
+import React, { useState, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {
+  SERVICES,
   SERVICE_CATEGORIES,
-  MENU_DISCLAIMER 
+  MENU_DISCLAIMER,
 } from '../../data/servicesData';
-import { 
-  Utensils,
-  Wine,
-  Sparkles,
-  Flame,
-  ArrowRight, 
+import {
   ArrowLeft,
-  Search,
+  ArrowRight,
   Phone,
-  Clock,
+  Search,
   CheckCircle2,
-  VerandahLogo
+  Utensils,
+  VerandahLogo,
 } from '../common/Icons';
 import { BUSINESS_INFO } from '../../data/businessData';
 
-export default function AllServicesPage({ onOpenWizard, onBackToHome }) {
+gsap.registerPlugin(ScrollTrigger);
+
+export default function AllServicesPage({ onOpenWizard, onBackToHome, darkMode }) {
   const [selectedCategory, setSelectedCategory] = useState('All Offerings');
   const [searchQuery, setSearchQuery] = useState('');
+  const ruleRef = useRef(null);
+  const gridRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  /* ── GSAP animations ── */
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      /* Draw-in gold rule */
+      if (ruleRef.current) {
+        gsap.fromTo(
+          ruleRef.current,
+          { width: '0%' },
+          {
+            width: '100%',
+            duration: 1.2,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: ruleRef.current,
+              start: 'top 90%',
+              once: true,
+            },
+          }
+        );
+      }
+
+        /* Stagger card fade-in */
+        if (gridRef.current) {
+          const cards = gridRef.current.querySelectorAll('.menu-card');
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 30 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.55,
+              stagger: 0.07,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: gridRef.current,
+                start: 'top 85%',
+                once: true,
+              },
+            }
+          );
+        }
+      });
+    return () => ctx.revert();
+  }, []);
+
+  /* Re-trigger card animations when filter changes */
+  useEffect(() => {
+    if (gridRef.current) {
+      const cards = gridRef.current.querySelectorAll('.menu-card');
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out' }
+      );
+    }
+  }, [selectedCategory, searchQuery]);
+
   const filteredServices = SERVICES.filter((service) => {
-    const matchesCategory = selectedCategory === 'All Offerings' || service.category === selectedCategory;
-    const matchesSearch = service.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          service.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === 'All Offerings' || service.category === selectedCategory;
+    const q = searchQuery.toLowerCase();
+    const matchesSearch =
+      service.title.toLowerCase().includes(q) ||
+      service.description.toLowerCase().includes(q);
     return matchesCategory && matchesSearch;
   });
 
+  /* ── Adaptive token shorthands ── */
+  const bg       = darkMode ? 'bg-[#0c0c0c]'         : 'bg-[#f5f0e8]';
+  const textInk  = darkMode ? 'text-[#f7f4ec]'        : 'text-[#0d0d0d]';
+  const textMid  = darkMode ? 'text-white/50'          : 'text-black/50';
+  const borderLine = darkMode ? 'border-white/8'      : 'border-black/10';
+  const cardBg   = darkMode ? 'bg-[#111]'             : 'bg-white';
+  const inputBg  = darkMode
+    ? 'bg-white/4 border-white/10 text-white placeholder-white/25 focus:border-[#c5a059]/60'
+    : 'bg-black/4 border-black/12 text-[#0d0d0d] placeholder-black/30 focus:border-[#b8955a]/60';
+
+  const goldTxt  = darkMode ? 'text-[#c5a059]' : 'text-[#b8955a]';
+  const goldVal  = darkMode ? '#c5a059' : '#b8955a';
+
   return (
-    <div className="min-h-screen bg-[#0d1e16] text-[#ded7c8] py-10 sm:py-16 px-4 sm:px-6 lg:px-8 pb-28 sm:pb-20">
-      <div className="max-w-7xl mx-auto">
-        {/* Back Bar */}
-        <div className="flex items-center justify-between pb-6 border-b border-[#c5a059]/20 mb-12">
+    <div className={`min-h-screen ${bg} ${textInk} pb-28 sm:pb-20 transition-colors duration-300`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-16">
+
+        {/* ── Top Bar ── */}
+        <div className={`flex items-center justify-between pb-5 mb-10 border-b ${borderLine}`}>
           <button
             onClick={onBackToHome}
-            className="inline-flex items-center space-x-2 text-[#ded7c8] hover:text-[#c5a059] bg-[#142a20] border border-[#c5a059]/30 hover:border-[#c5a059] px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-sm cursor-pointer"
+            className="btn-pill flex items-center gap-2 !py-2 !px-5 cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4 text-[#c5a059]" />
+            <ArrowLeft className="w-3.5 h-3.5" />
             <span>Return to Verandah</span>
           </button>
 
-          <div className="flex items-center space-x-3 text-sm">
-            <span className="text-[#ded7c8]/60 hidden sm:inline">Host Stand & Reservations:</span>
-            <a
-              href={`tel:${BUSINESS_INFO.phoneRaw}`}
-              className="text-[#c5a059] font-bold hover:text-white flex items-center space-x-2 transition"
-            >
-              <Phone className="w-4 h-4 text-[#c5a059]" />
-              <span>{BUSINESS_INFO.phone}</span>
-            </a>
-          </div>
+          <a
+            href={`tel:${BUSINESS_INFO.phone}`}
+            className={`hidden sm:flex items-center gap-2 text-sm font-semibold ${goldTxt} transition hover:opacity-80`}
+          >
+            <Phone className="w-4 h-4" />
+            <span>{BUSINESS_INFO.phone}</span>
+          </a>
         </div>
 
-        {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#183327] border border-[#c5a059]/30 text-[#c5a059] text-xs uppercase tracking-widest font-semibold mb-3">
-            <VerandahLogo className="w-4 h-4 text-[#c5a059]" />
+        {/* ── Page Header ── */}
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          {/* Micro-label */}
+          <p className={`micro-label ${goldTxt} mb-4 flex items-center justify-center gap-2`}>
+            <VerandahLogo className="w-4 h-4" />
             <span>Official Devon House Menus · Jamaican Dollars (JMD)</span>
-          </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold text-white tracking-tight">
-            The Verandah Repertoire
-          </h1>
-          <p className="text-[#ded7c8]/70 mt-4 text-base sm:text-lg font-serif italic leading-relaxed">
-            From the sizzling 16oz USDA Ribeye and broiled "Meat Butter" bone marrow to our historic stuffed crab backs, rum cellar flights, and world-famous Devon House desserts.
           </p>
 
-          <div className="mt-4 p-3 rounded-2xl bg-[#142a20]/90 border border-[#c5a059]/30 text-xs text-[#c5a059] font-medium max-w-xl mx-auto">
+          <h1
+            className={`font-serif text-4xl sm:text-6xl font-bold tracking-tight ${textInk} uppercase`}
+          >
+            The Verandah Repertoire
+          </h1>
+
+          <p
+            className={`mt-4 text-sm sm:text-base font-cursive ${textMid} italic leading-relaxed max-w-xl mx-auto`}
+          >
+            From the sizzling 16 oz USDA Ribeye and broiled "Meat Butter" bone marrow to
+            our heritage stuffed crab backs, rum cellar flights, and world-famous Devon
+            House desserts.
+          </p>
+
+          {/* Gold draw-in rule */}
+          <div
+            ref={ruleRef}
+            className="h-px mt-6 mb-5 mx-auto"
+            style={{
+              width: '0%',
+              background: `linear-gradient(to right, transparent, ${goldVal}, transparent)`,
+            }}
+          />
+
+          {/* Disclaimer */}
+          <p className={`micro-label ${textMid} max-w-md mx-auto leading-relaxed normal-case font-normal`}>
             {MENU_DISCLAIMER}
-          </div>
+          </p>
         </div>
 
-        {/* Filter Bar & Search */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-5 mb-12 bg-[#142a20] p-5 rounded-3xl border border-[#c5a059]/30 shadow-lg">
-          {/* Category Tabs */}
-          <div className="flex flex-wrap gap-2.5 w-full md:w-auto justify-center md:justify-start">
-            {SERVICE_CATEGORIES.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold tracking-wide transition-all cursor-pointer ${
-                  selectedCategory === category
-                    ? 'bg-[#c5a059] text-[#0d1e16] font-bold shadow-md'
-                    : 'bg-[#183327] text-[#ded7c8]/80 hover:text-white hover:bg-[#1f3f31] border border-[#c5a059]/20'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+        {/* ── Filter Bar & Search ── */}
+        <div
+          className={`flex flex-col md:flex-row items-start md:items-center justify-between gap-5 mb-12 pb-6 border-b ${borderLine}`}
+        >
+          {/* Category tabs */}
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {SERVICE_CATEGORIES.map((category) => {
+              const active = selectedCategory === category;
+              return (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`text-[10px] tracking-[0.22em] uppercase font-semibold pb-1 border-b-2 transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                    active
+                      ? darkMode
+                        ? 'border-[#c5a059] text-[#c5a059]'
+                        : 'border-[#b8955a] text-[#b8955a]'
+                      : `border-transparent ${textMid} hover:${textInk}`
+                  }`}
+                >
+                  {category}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Search Box */}
-          <div className="relative w-full md:w-80">
-            <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#c5a059]/60" />
+          {/* Search */}
+          <div className="relative w-full md:w-72 shrink-0">
+            <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 ${goldTxt} opacity-60`} />
             <input
               type="text"
-              placeholder="Search ribeye, marrow, rum, pasta..."
+              placeholder="Search ribeye, marrow, rum…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-[#0d1e16] border border-[#c5a059]/30 text-white placeholder:text-[#ded7c8]/40 focus:outline-none focus:border-[#c5a059] text-sm"
+              className={`w-full pl-10 pr-4 py-2.5 rounded-full border text-sm focus:outline-none transition ${inputBg}`}
             />
           </div>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* ── Services Grid ── */}
+        <div ref={gridRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
           {filteredServices.map((service) => (
             <div
               key={service.id}
-              className="card-thick-hover bg-[#142a20] border-2 border-[#c5a059]/30 rounded-3xl overflow-hidden flex flex-col justify-between group transition-all"
+              className={`menu-card card-thick-hover ${cardBg} rounded-2xl overflow-hidden flex flex-col will-animate`}
             >
-              <div className="relative h-52 w-full overflow-hidden">
+              {/* Image */}
+              <div className="relative h-48 w-full overflow-hidden">
                 <img
                   src={service.image}
                   alt={service.title}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-[#0d1e16]/90 border border-[#c5a059]/40 text-xs font-bold text-[#c5a059]">
-                  {service.price}
-                </div>
                 {service.popular && (
-                  <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-[#c5a059] text-[#0d1e16] text-[10px] font-bold uppercase tracking-wider">
+                  <div
+                    className="absolute top-3 right-3 micro-label px-3 py-1 rounded-full text-white"
+                    style={{ backgroundColor: goldVal }}
+                  >
                     Signature
                   </div>
                 )}
               </div>
 
-              <div className="p-6 flex-1 flex flex-col justify-between">
+              {/* Body */}
+              <div className="p-7 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="text-[11px] uppercase tracking-widest text-[#c5a059] font-bold block mb-1">
+                  {/* Category micro-label */}
+                  <p className={`micro-label ${goldTxt} mb-1`}>
                     {service.subType || service.category}
-                  </span>
-                  <h2 className="text-xl font-serif font-bold text-white group-hover:text-[#c5a059] transition">
+                  </p>
+
+                  {/* Dish name */}
+                  <h2 className={`font-serif text-xl font-bold ${textInk} leading-snug`}>
                     {service.title}
                   </h2>
-                  <p className="text-xs text-[#ded7c8]/80 leading-relaxed mt-2.5">
+
+                  <p className={`text-xs ${textMid} leading-relaxed mt-2.5`}>
                     {service.description}
                   </p>
 
+                  {/* Features */}
                   {service.features && (
-                    <div className="space-y-1.5 mt-4 pt-3 border-t border-[#c5a059]/15">
+                    <div className={`mt-4 pt-3 border-t ${borderLine} space-y-1.5`}>
                       {service.features.map((f, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-xs text-[#ded7c8]/70">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#c5a059] shrink-0" />
-                          <span>{f}</span>
+                        <div key={idx} className="flex items-center gap-2 text-xs">
+                          <CheckCircle2 className={`w-3.5 h-3.5 ${goldTxt} shrink-0`} />
+                          <span className={textMid}>{f}</span>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[#c5a059]/20 flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#c5a059]">{service.price}</span>
+                {/* Footer: price + CTA */}
+                <div className={`mt-6 pt-4 border-t ${borderLine} flex items-center justify-between`}>
+                  <span className={`text-sm font-bold ${goldTxt}`}>{service.price}</span>
                   <button
                     onClick={() => onOpenWizard(service.category, service.title)}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#c5a059] text-[#0d1e16] text-xs font-bold uppercase tracking-wider hover:bg-[#d8b46e] shadow transition cursor-pointer"
+                    className="btn-pill-gold flex items-center gap-2 !py-2 !px-4 !text-[10px] cursor-pointer"
                   >
                     <span>Reserve Table</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -172,21 +280,29 @@ export default function AllServicesPage({ onOpenWizard, onBackToHome }) {
           ))}
         </div>
 
+        {/* ── Empty State ── */}
         {filteredServices.length === 0 && (
-          <div className="text-center py-20 bg-[#142a20] rounded-3xl border border-[#c5a059]/20 p-8">
-            <Utensils className="w-12 h-12 text-[#c5a059] mx-auto mb-4 opacity-50" />
-            <h3 className="text-xl font-serif font-bold text-white mb-2">No selections match your search</h3>
-            <p className="text-sm text-[#ded7c8]/60 mb-6">
-              Please try adjusting your search or reset filters to view all offerings.
+          <div
+            className={`text-center py-20 rounded-2xl border ${borderLine} ${darkMode ? 'bg-white/3' : 'bg-black/3'} p-10 mt-4`}
+          >
+            <Utensils className={`w-10 h-10 ${goldTxt} mx-auto mb-4 opacity-40`} />
+            <h3 className={`font-serif text-xl font-bold ${textInk} mb-2`}>
+              No selections match your search
+            </h3>
+            <p className={`text-sm ${textMid} mb-7`}>
+              Try adjusting your search or reset the filters to view all offerings.
             </p>
             <button
               onClick={() => { setSelectedCategory('All Offerings'); setSearchQuery(''); }}
-              className="px-6 py-2.5 rounded-xl bg-[#c5a059] text-[#0d1e16] font-bold text-xs uppercase tracking-wider hover:bg-[#d8b46e] transition"
+              className="btn-pill-gold cursor-pointer"
             >
               Reset Filters
             </button>
           </div>
         )}
+
+        {/* Bottom spacer */}
+        <div className="h-12" />
       </div>
     </div>
   );

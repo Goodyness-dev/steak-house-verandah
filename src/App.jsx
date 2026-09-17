@@ -47,18 +47,18 @@ export default function App() {
   // Apply dark class to <html>
   useEffect(() => {
     const root = document.documentElement;
-    if (darkMode || currentPage === 'admin') {
+    if (darkMode) {
       root.classList.add('dark');
       document.body.style.backgroundColor = '#0c0c0c';
       document.body.style.color = '#f7f4ec';
-      if (currentPage !== 'admin') localStorage.setItem('verandah_theme', 'dark');
+      localStorage.setItem('verandah_theme', 'dark');
     } else {
       root.classList.remove('dark');
       document.body.style.backgroundColor = '#f5f0e8';
       document.body.style.color = '#0d0d0d';
       localStorage.setItem('verandah_theme', 'light');
     }
-  }, [darkMode, currentPage]);
+  }, [darkMode]);
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
@@ -104,11 +104,15 @@ export default function App() {
         user={adminUser}
         onLogout={() => { setIsAdminAuthenticated(false); setAdminUser(null); }}
         onBackToSite={() => handleNavigate('home')}
+        darkMode={darkMode}
+        onToggleDarkMode={toggleDarkMode}
       />
     ) : (
       <AdminLogin
         onLoginSuccess={(user) => { setIsAdminAuthenticated(true); setAdminUser(user); }}
         onBackToSite={() => handleNavigate('home')}
+        darkMode={darkMode}
+        onToggleDarkMode={toggleDarkMode}
       />
     );
   }
