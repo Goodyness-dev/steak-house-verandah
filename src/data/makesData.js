@@ -1,10 +1,39 @@
+/**
+ * Seating Areas and Dining Occasions for The Steak House on The Verandah
+ * Historic Devon House, Kingston, Jamaica
+ */
+
 export const SEATING_AREAS = [
-  'Historic Devon Verandah (Open-Air Garden View)',
-  'Private Tropical Gazebo (Intimate Outdoor)',
-  'Main Heritage Verandah (Acoustic Center)',
-  'Cellar Dining Room (Air-Conditioned Vintage Ambience)',
-  'Sommelier Tasting Lounge',
-  'Chef\'s Terrace Table'
+  {
+    id: 'grand-verandah',
+    name: 'Historic Devon Verandah',
+    description: 'Open-air colonial arches overlooking illuminated estate gardens'
+  },
+  {
+    id: 'tropical-gazebo',
+    name: 'Private Tropical Gazebo',
+    description: 'Intimate secluded garden gazebo for romantic celebrations'
+  },
+  {
+    id: 'acoustic-verandah',
+    name: 'Main Heritage Verandah',
+    description: 'Center of verandah chophouse atmosphere near evening acoustic jazz'
+  },
+  {
+    id: 'cellar-room',
+    name: 'Mahogany Cellar Room',
+    description: 'Air-conditioned indoor dining surrounded by vintage reserve wines'
+  },
+  {
+    id: 'tasting-lounge',
+    name: 'Sommelier Tasting Lounge',
+    description: 'Chic cocktail bar seating for rum flights and pre-dinner drinks'
+  },
+  {
+    id: 'chef-terrace',
+    name: "Chef's Garden Terrace",
+    description: 'Al-fresco terrace table with direct view of lush tropical flora'
+  }
 ];
 
 export const DINING_OCCASIONS = [
@@ -17,6 +46,5 @@ export const DINING_OCCASIONS = [
   'Casual Fine Dining'
 ];
 
-// Retain alias for any wizard component compatibility
-export const VEHICLE_MAKES = SEATING_AREAS;
-
+// Alias for backwards compatibility
+export const VEHICLE_MAKES = SEATING_AREAS.map(a => a.name);

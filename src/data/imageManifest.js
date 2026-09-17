@@ -20,7 +20,14 @@ export const imageManifest = {
     wine: '/images/wine-cellar.jpg',
     boneMarrow: '/images/dish-bone-marrow.jpg',
     crabLobster: '/images/dish-crab-lobster.jpg',
-    steakhouseBrew: '/images/cocktail-steakhouse-brew.jpg'
+    steakhouseBrew: '/images/cocktail-steakhouse-brew.jpg',
+    filetMignon: '/images/dish-filet-mignon.jpg',
+    tboneSkillet: '/images/dish-tbone-skillet.jpg',
+    lambRack: '/images/dish-lamb-rack.jpg',
+    steakBurger: '/images/dish-steak-burger.jpg',
+    lobsterRoll: '/images/dish-lobster-roll.jpg',
+    emeraldBay: '/images/cocktail-emerald-bay.jpg',
+    rumCake: '/images/dish-rum-cake.jpg'
   },
   venue: {
     terrace: '/images/verandah-terrace.jpg',

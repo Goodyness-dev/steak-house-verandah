@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
-import { SERVICES, SERVICE_CATEGORIES, MENU_DISCLAIMER } from '../../data/servicesData';
+import React from 'react';
+import { SERVICES, MENU_DISCLAIMER } from '../../data/servicesData';
 import { ArrowRight, Utensils, Sparkles, Star, Wine, Flame, ChevronRight } from '../common/Icons';
 
 export default function ServicesSection({ onOpenWizard, onViewAllServices }) {
-  const [activeCategory, setActiveCategory] = useState('All Offerings');
-
-  const filteredServices = activeCategory === 'All Offerings'
-    ? SERVICES
-    : SERVICES.filter(s => s.category === activeCategory);
+  // Just show the top 4 flagship signature items on the homepage to avoid clutter
+  const featuredServices = [
+    SERVICES.find(s => s.id === 'usda-ribeye') || SERVICES[0],
+    SERVICES.find(s => s.id === 'bone-marrow-meat-butter') || SERVICES[1],
+    SERVICES.find(s => s.id === 'stuffed-crab-backs') || SERVICES[2],
+    SERVICES.find(s => s.id === 'steakhouse-brew') || SERVICES[3],
+  ];
 
   return (
     <section id="menu" className="py-20 sm:py-28 bg-[#0a1711] text-[#f7f4ec] transition-colors" aria-labelledby="menu-heading">
@@ -20,34 +22,14 @@ export default function ServicesSection({ onOpenWizard, onViewAllServices }) {
             <span>Devon House Al-Fresco Estate Chophouse</span>
           </div>
           <h2 id="menu-heading" className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-[#f7f4ec]">
-            Authentic Verandah Repertoire
+            Culinary Highlights
           </h2>
           <p className="text-[#ded7c8] mt-4 text-base sm:text-lg leading-relaxed font-light">
-            Savor prime steaks prepared Classic, Chimichurri, or Jamaican Country Style (scotch bonnet & pimento), paired with the famous "Meat Butter" bone marrow, local stuffed crab backs, and island fuzion pastas.
+            An intimate preview of our Jamaican fusion and chophouse specialties. Flame-grilled steaks with scotch bonnet herbs, broiled "Meat Butter", local stuffed crab, and reserve cellar cocktails.
           </p>
           <p className="text-xs text-[#c5a059] font-medium mt-2">
             {MENU_DISCLAIMER}
           </p>
-        </div>
-
-        {/* Category Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mb-16">
-          {SERVICE_CATEGORIES.map((category) => {
-            const isActive = activeCategory === category;
-            return (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide transition-all cursor-pointer ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[#c5a059] to-[#9d7a36] text-[#0a1711] shadow-md scale-105 font-bold'
-                    : 'bg-[#142a20] text-[#ded7c8] hover:text-[#f7f4ec] hover:bg-[#1a372a] border border-[#284d3b]'
-                }`}
-              >
-                {category}
-              </button>
-            );
-          })}
         </div>
 
         {/* ========================================================================= */}
@@ -133,9 +115,9 @@ export default function ServicesSection({ onOpenWizard, onViewAllServices }) {
                 </button>
                 <button
                   onClick={onViewAllServices}
-                  className="text-xs text-[#c5a059] hover:underline font-bold flex items-center gap-1"
+                  className="text-xs text-[#c5a059] hover:underline font-bold flex items-center gap-1 cursor-pointer"
                 >
-                  <span>View All Dinner, Lunch & Bar Menus</span>
+                  <span>View All Menus & Courses</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -199,63 +181,101 @@ export default function ServicesSection({ onOpenWizard, onViewAllServices }) {
           </div>
         </div>
 
-        {/* Full Filtered Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {filteredServices.map((service) => (
-            <article
-              key={service.id}
-              className="card-thick-hover bg-[#142a20] border-2 border-[#284d3b] rounded-3xl overflow-hidden flex flex-col cursor-pointer group"
-              onClick={() => onOpenWizard(service.category, service.title)}
+        {/* ========================================================================= */}
+        {/* HOMEPAGE SPOTLIGHT: 4 Flagship Signature Cards ONLY (Clean & Spacious)     */}
+        {/* ========================================================================= */}
+        <div className="mb-14">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-4 border-b border-[#284d3b]">
+            <div>
+              <span className="text-xs uppercase tracking-widest text-[#c5a059] font-bold block mb-1">
+                Curated Selection
+              </span>
+              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+                Four Signature Verandah Flagships
+              </h3>
+            </div>
+            <button
+              onClick={onViewAllServices}
+              className="mt-3 sm:mt-0 inline-flex items-center gap-1.5 text-xs text-[#c5a059] hover:text-white font-bold uppercase tracking-wider transition cursor-pointer"
             >
-              <div className="relative h-56 w-full overflow-hidden">
-                <img
-                  src={service.image}
-                  alt={service.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#0d1e16]/90 border border-[#c5a059]/40 text-xs font-bold text-[#c5a059]">
-                  {service.price}
-                </div>
-                {service.popular && (
-                  <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-[#c5a059] text-[#0d1e16] text-[10px] font-bold uppercase tracking-wider">
-                    Signature
+              <span>Explore Dedicated Menus Page</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredServices.map((service) => (
+              <article
+                key={service.id}
+                className="card-thick-hover bg-[#142a20] border-2 border-[#284d3b] rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer group transition-all"
+                onClick={() => onOpenWizard(service.category, service.title)}
+              >
+                <div className="relative h-48 w-full overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[#0d1e16]/90 border border-[#c5a059]/40 text-xs font-bold text-[#c5a059]">
+                    {service.price}
                   </div>
-                )}
-              </div>
-
-              <div className="p-6 flex-1 flex flex-col justify-between">
-                <div>
-                  <span className="text-[11px] uppercase tracking-widest text-[#c5a059] font-bold block mb-1">
-                    {service.subType || service.category}
-                  </span>
-                  <h3 className="font-serif text-xl font-bold text-white group-hover:text-[#c5a059] transition">
-                    {service.title}
-                  </h3>
-                  <p className="text-xs text-[#ded7c8]/80 leading-relaxed mt-2.5">
-                    {service.description}
-                  </p>
+                  {service.popular && (
+                    <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#c5a059] text-[#0d1e16] text-[10px] font-bold uppercase tracking-wider">
+                      Flagship
+                    </div>
+                  )}
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-[#284d3b] flex items-center justify-between text-xs">
-                  <span className="text-[#ded7c8]/60">Estate Fine Dining</span>
-                  <span className="text-[#c5a059] font-bold flex items-center gap-1 group-hover:translate-x-1 transition">
-                    Reserve Table →
-                  </span>
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase tracking-widest text-[#c5a059] font-bold block mb-1">
+                      {service.subType || service.category}
+                    </span>
+                    <h4 className="font-serif text-lg font-bold text-white group-hover:text-[#c5a059] transition line-clamp-1">
+                      {service.title}
+                    </h4>
+                    <p className="text-xs text-[#ded7c8]/70 leading-relaxed mt-2 line-clamp-3">
+                      {service.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-5 pt-3 border-t border-[#284d3b] flex items-center justify-between text-xs">
+                    <span className="text-[#ded7c8]/60">Estate Dining</span>
+                    <span className="text-[#c5a059] font-bold flex items-center gap-1 group-hover:translate-x-1 transition">
+                      Reserve →
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
 
-        {/* View All Button */}
-        <div className="mt-14 text-center">
-          <button
-            onClick={onViewAllServices}
-            className="px-8 py-3.5 rounded-2xl bg-[#142a20] hover:bg-[#183327] border-2 border-[#c5a059]/50 hover:border-[#c5a059] text-[#c5a059] hover:text-white text-xs font-bold uppercase tracking-widest shadow-lg transition active:scale-95 cursor-pointer"
-          >
-            Explore Complete Verandah Repertoire (Dinner, Lunch & Cocktails)
-          </button>
+        {/* ========================================================================= */}
+        {/* DEDICATED MENU PAGE PROMOTIONAL BANNER (De-Clutters Homepage)              */}
+        {/* ========================================================================= */}
+        <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#142a20] via-[#183327] to-[#142a20] border-2 border-[#c5a059]/40 shadow-2xl text-center relative overflow-hidden">
+          <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+            <span className="text-xs uppercase tracking-widest text-[#c5a059] font-bold px-3.5 py-1 rounded-full bg-[#0d1e16] border border-[#c5a059]/30 inline-block">
+              Dedicated Culinary Dossier
+            </span>
+            <h3 className="font-serif text-2xl sm:text-4xl font-bold text-white">
+              Explore The Complete Estate Repertoire
+            </h3>
+            <p className="text-xs sm:text-sm text-[#ded7c8]/80 leading-relaxed">
+              Browse our comprehensive à la carte menus on a dedicated, spacious page—including our Full Dinner Chophouse, Al-Fresco Lunch Burgers & Sandwiches, Open House Tostones & Frites, and Reserve Rum Cocktails.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={onViewAllServices}
+                className="px-8 py-4 rounded-2xl bg-[#c5a059] hover:bg-[#d8b46e] text-[#0d1e16] font-bold text-xs sm:text-sm uppercase tracking-widest shadow-xl transition active:scale-95 cursor-pointer inline-flex items-center gap-2.5"
+              >
+                <span>View Full Menus & All Categories (27+ Items)</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>

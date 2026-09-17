@@ -173,25 +173,30 @@ export default function QuoteWizardModal({ isOpen, onClose }) {
                       Preferred Ambience & Seating
                     </label>
                     <div className="grid sm:grid-cols-2 gap-3">
-                      {(SEATING_AREAS || []).map((area) => (
-                        <button
-                          key={area.id}
-                          type="button"
-                          onClick={() => setFormData({ ...formData, seatingArea: area.name })}
-                          className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between ${
-                            formData.seatingArea === area.name
-                              ? 'border-[#c5a059] bg-[#183327] text-white'
-                              : 'border-[#c5a059]/20 bg-[#142a20]/40 text-[#ded7c8]/70 hover:border-[#c5a059]/50'
-                          }`}
-                        >
-                          <span className="font-serif font-bold text-sm text-white mb-1">
-                            {area.name}
-                          </span>
-                          <span className="text-xs text-[#ded7c8]/60">
-                            {area.description}
-                          </span>
-                        </button>
-                      ))}
+                      {(SEATING_AREAS || []).map((area, idx) => {
+                        const name = typeof area === 'string' ? area : (area.name || `Seating ${idx + 1}`);
+                        const desc = typeof area === 'object' && area.description ? area.description : 'Devon House historic dining setting';
+                        const id = typeof area === 'object' && area.id ? area.id : `seat-${idx}`;
+                        return (
+                          <button
+                            key={id}
+                            type="button"
+                            onClick={() => setFormData({ ...formData, seatingArea: name })}
+                            className={`p-4 rounded-2xl border text-left transition flex flex-col justify-between cursor-pointer ${
+                              formData.seatingArea === name
+                                ? 'border-[#c5a059] bg-[#183327] text-white shadow-md ring-1 ring-[#c5a059]'
+                                : 'border-[#c5a059]/20 bg-[#142a20]/40 text-[#ded7c8]/70 hover:border-[#c5a059]/50'
+                            }`}
+                          >
+                            <span className="font-serif font-bold text-sm text-white mb-1">
+                              {name}
+                            </span>
+                            <span className="text-xs text-[#ded7c8]/60 leading-relaxed">
+                              {desc}
+                            </span>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
