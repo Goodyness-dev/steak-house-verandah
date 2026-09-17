@@ -1,78 +1,116 @@
-import React from 'react';
-import { Star, Quote, ArrowRight } from '../common/Icons';
+import React, { useRef, useEffect } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Star } from '../common/Icons';
 import { BUSINESS_INFO } from '../../data/businessData';
 
-export default function ReviewsSection({ onOpenWizard }) {
+gsap.registerPlugin(ScrollTrigger);
+
+export default function ReviewsSection({ onOpenWizard, darkMode }) {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        sectionRef.current.querySelectorAll('.review-card'),
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.65,
+          ease: 'power3.out',
+          stagger: 0.14,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 72%',
+            once: true,
+          },
+        }
+      );
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  const bg     = darkMode ? 'bg-[#0c0c0c]' : 'bg-[#ece5d6]';
+  const txt    = darkMode ? 'text-[#f7f4ec]' : 'text-black';
+  const sub    = darkMode ? 'text-white/50' : 'text-black/50';
+  const acc    = darkMode ? 'text-[#c5a059]' : 'text-[#b8955a]';
+  const cardBg = darkMode ? 'bg-white/3 border-white/6' : 'bg-white/70 border-black/8';
+  const bdr    = darkMode ? 'border-white/8' : 'border-black/8';
+
   return (
-    <section id="reviews" className="py-20 sm:py-28 bg-[#0a1711] text-[#f7f4ec] transition-colors" aria-labelledby="reviews-heading">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-18">
-          <span className="font-cursive-accent text-2xl sm:text-3xl text-[#c5a059] italic block mb-1">
-            Guest Accolades & Endorsements
-          </span>
-          <h2 id="reviews-heading" className="font-serif-luxury text-3xl sm:text-5xl font-bold tracking-tight text-[#f7f4ec]">
+    <section
+      id="reviews"
+      ref={sectionRef}
+      className={`py-24 sm:py-32 transition-colors duration-300 ${bg}`}
+      aria-labelledby="reviews-heading"
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+
+        {/* Header */}
+        <div className="text-center mb-14 sm:mb-20">
+          <p className={`micro-label mb-3 ${acc}`}>Guest Accolades</p>
+          <h2
+            id="reviews-heading"
+            className={`font-serif font-bold ${txt}`}
+            style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}
+          >
             An Unforgettable Evening
           </h2>
-          <div className="flex items-center justify-center space-x-2.5 mt-3 sm:mt-4">
-            <div className="flex text-[#c5a059]" aria-label="5 stars">
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <div className="flex gap-0.5">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 fill-[#c5a059]" />
+                <Star key={i} className="w-4 h-4 fill-[#d4af37] text-[#d4af37]" />
               ))}
             </div>
-            <span className="text-[#ded7c8] text-sm sm:text-base font-semibold">
-              4.9 Star Rating · Kingston's Benchmark Fine Dining Chophouse
+            <span className={`text-sm font-semibold ${sub}`}>
+              4.9 · Kingston's Benchmark Chophouse
             </span>
           </div>
         </div>
 
-        {/* Review Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {BUSINESS_INFO.reviews.map((rev, idx) => (
             <article
               key={idx}
-              className="card-thick-hover p-6 sm:p-8 flex flex-col justify-between border border-[#284d3b]"
+              className={`review-card rounded-2xl p-7 sm:p-9 border flex flex-col justify-between ${cardBg}`}
+              style={{ opacity: 0 }}
             >
               <div>
-                {/* Stars + Source */}
-                <div className="flex justify-between items-center mb-4">
-                  <div className="flex text-[#c5a059]" aria-label={`${rev.rating} stars`}>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="flex gap-0.5">
                     {[...Array(rev.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#c5a059]" />
+                      <Star key={i} className="w-4 h-4 fill-[#d4af37] text-[#d4af37]" />
                     ))}
                   </div>
-                  <span className="text-xs font-semibold text-[#c5a059] bg-[#0d1e16] border border-[#284d3b] px-3 py-1 rounded-full">
+                  <span className={`text-[10px] font-bold tracking-[0.2em] uppercase ${acc}`}>
                     {rev.source}
                   </span>
                 </div>
-
-                {/* Review Text */}
-                <p className="text-[#ded7c8] text-sm sm:text-base leading-relaxed mb-6 italic font-light">
+                <p className={`text-sm sm:text-base leading-relaxed italic font-light ${sub}`}>
                   "{rev.comment}"
                 </p>
               </div>
-
-              {/* Author */}
-              <div className="pt-4 border-t border-[#284d3b]/80 flex justify-between items-center">
+              <div className={`mt-6 pt-5 border-t ${bdr} flex items-center justify-between`}>
                 <div>
-                  <h3 className="font-serif-luxury font-bold text-[#f7f4ec] text-base">{rev.author}</h3>
-                  <span className="text-xs text-[#a3b8ad]">{rev.location}</span>
+                  <p className={`font-semibold text-sm ${txt}`}>{rev.author}</p>
+                  <p className={`text-xs mt-0.5 ${sub}`}>{rev.location}</p>
                 </div>
-                <span className="text-xs text-[#a3b8ad]">{rev.date}</span>
+                <span className={`text-[10px] ${sub}`}>{rev.date}</span>
               </div>
             </article>
           ))}
         </div>
 
         {/* CTA */}
-        <div className="mt-14 sm:mt-16 text-center">
+        <div className="mt-14 text-center">
           <button
             onClick={() => onOpenWizard()}
-            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#c5a059] to-[#9d7a36] text-[#0a1711] font-bold text-base tracking-wide shadow-lg hover:brightness-110 active:scale-95 transition cursor-pointer"
-            aria-label="Reserve your table today"
+            className="btn-pill-gold"
           >
-            Reserve Your Verandah Table Today
+            Reserve Your Table Today
           </button>
         </div>
 

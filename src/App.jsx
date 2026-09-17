@@ -4,8 +4,9 @@ import Hero from './components/home/Hero';
 import ServicesSection from './components/home/ServicesSection';
 import AboutSection from './components/home/AboutSection';
 import AmenitiesSection from './components/home/AmenitiesSection';
-import LocationHoursSection from './components/home/LocationHoursSection';
+import CTASection from './components/home/CTASection';
 import ReviewsSection from './components/home/ReviewsSection';
+import LocationHoursSection from './components/home/LocationHoursSection';
 import Footer from './components/layout/Footer';
 import AllServicesPage from './components/services/AllServicesPage';
 import QuoteWizardModal from './components/wizard/QuoteWizardModal';
@@ -16,86 +17,58 @@ import { BUSINESS_INFO } from './data/businessData';
 import { authApi, getStoredToken } from './services/api';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'services' | 'admin'
+  const [currentPage, setCurrentPage] = useState('home');
   const [wizardOpen, setWizardOpen] = useState(false);
   const [wizardCategory, setWizardCategory] = useState(null);
   const [wizardService, setWizardService] = useState(null);
-
-  // Admin Authentication State
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminUser, setAdminUser] = useState(null);
 
-  // Midnight Dark Mode state
+  // Default to light mode (Gilded Grill aesthetic)
   const [darkMode, setDarkMode] = useState(() => {
     try {
-      const saved = localStorage.getItem('tobys_theme');
+      const saved = localStorage.getItem('verandah_theme');
       if (saved) return saved === 'dark';
-      return false; // Default to clean light mode unless toggled
+      return false; // light mode default
     } catch {
       return false;
     }
   });
 
-  // Check stored auth token on mount
   useEffect(() => {
     const token = getStoredToken();
     if (token) {
       authApi.verify()
-        .then(res => {
-          if (res.authenticated) {
-            setIsAdminAuthenticated(true);
-            setAdminUser(res.user);
-          }
-        })
-        .catch(() => {
-          setIsAdminAuthenticated(false);
-        });
+        .then(res => { if (res.authenticated) { setIsAdminAuthenticated(true); setAdminUser(res.user); } })
+        .catch(() => setIsAdminAuthenticated(false));
     }
   }, []);
 
-  // Apply dark class to <html> and <body> immediately
+  // Apply dark class to <html>
   useEffect(() => {
     const root = document.documentElement;
     if (darkMode || currentPage === 'admin') {
       root.classList.add('dark');
-      document.body.classList.add('dark');
-      if (currentPage !== 'admin') {
-        localStorage.setItem('tobys_theme', 'dark');
-      }
+      document.body.style.backgroundColor = '#0c0c0c';
+      document.body.style.color = '#f7f4ec';
+      if (currentPage !== 'admin') localStorage.setItem('verandah_theme', 'dark');
     } else {
       root.classList.remove('dark');
-      document.body.classList.remove('dark');
-      localStorage.setItem('tobys_theme', 'light');
+      document.body.style.backgroundColor = '#f5f0e8';
+      document.body.style.color = '#0d0d0d';
+      localStorage.setItem('verandah_theme', 'light');
     }
   }, [darkMode, currentPage]);
 
-  const toggleDarkMode = () => {
-    setDarkMode(prev => {
-      const next = !prev;
-      if (next) {
-        document.documentElement.classList.add('dark');
-        document.body.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.body.classList.remove('dark');
-      }
-      return next;
-    });
-  };
+  const toggleDarkMode = () => setDarkMode(prev => !prev);
 
-  // Sync with browser URL hash for routing
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      if (hash === '#/admin' || hash === '#admin') {
-        setCurrentPage('admin');
-      } else if (hash === '#/services' || hash === '#services-all') {
-        setCurrentPage('services');
-      } else {
-        setCurrentPage('home');
-      }
+      if (hash === '#/admin' || hash === '#admin') setCurrentPage('admin');
+      else if (hash === '#/services' || hash === '#services-all') setCurrentPage('services');
+      else setCurrentPage('home');
     };
-
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
@@ -103,11 +76,9 @@ export default function App() {
 
   const handleNavigate = (page) => {
     setCurrentPage(page);
-    if (page === 'services') {
-      window.location.hash = '#/services';
-    } else if (page === 'admin') {
-      window.location.hash = '#/admin';
-    } else {
+    if (page === 'services') window.location.hash = '#/services';
+    else if (page === 'admin') window.location.hash = '#/admin';
+    else {
       if (window.location.hash.startsWith('#/services') || window.location.hash.startsWith('#/admin')) {
         window.history.pushState(null, '', window.location.pathname);
       }
@@ -127,68 +98,62 @@ export default function App() {
     setWizardService(null);
   };
 
-  // If on Admin route, render full-screen Admin portal
   if (currentPage === 'admin') {
     return isAdminAuthenticated ? (
       <AdminLayout
         user={adminUser}
-        onLogout={() => {
-          setIsAdminAuthenticated(false);
-          setAdminUser(null);
-        }}
+        onLogout={() => { setIsAdminAuthenticated(false); setAdminUser(null); }}
         onBackToSite={() => handleNavigate('home')}
       />
     ) : (
       <AdminLogin
-        onLoginSuccess={(user) => {
-          setIsAdminAuthenticated(true);
-          setAdminUser(user);
-        }}
+        onLoginSuccess={(user) => { setIsAdminAuthenticated(true); setAdminUser(user); }}
         onBackToSite={() => handleNavigate('home')}
       />
     );
   }
 
+  const dm = darkMode;
+
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-black text-white' : 'bg-white text-gray-900'} flex flex-col font-sans transition-colors duration-200`}>
-      {/* Global Navbar with Dark Mode Toggle */}
-      <Navbar 
-        onOpenWizard={() => handleOpenWizard()} 
+    <div
+      className="min-h-screen flex flex-col font-sans transition-colors duration-300"
+      style={{ backgroundColor: dm ? '#0c0c0c' : '#f5f0e8', color: dm ? '#f7f4ec' : '#0d0d0d' }}
+    >
+      <Navbar
+        onOpenWizard={handleOpenWizard}
         currentPage={currentPage}
         onNavigate={handleNavigate}
-        darkMode={darkMode}
+        darkMode={dm}
         onToggleDarkMode={toggleDarkMode}
       />
 
-      {/* Main View: Landing Page OR All Services Page */}
       <main className="flex-grow">
         {currentPage === 'services' ? (
-          <AllServicesPage 
+          <AllServicesPage
             onOpenWizard={handleOpenWizard}
             onBackToHome={() => handleNavigate('home')}
+            darkMode={dm}
           />
         ) : (
           <>
-            <Hero onOpenWizard={handleOpenWizard} />
-            <ServicesSection 
+            <Hero onOpenWizard={handleOpenWizard} darkMode={dm} />
+            <ServicesSection
               onOpenWizard={handleOpenWizard}
               onViewAllServices={() => handleNavigate('services')}
+              darkMode={dm}
             />
-            <AboutSection onOpenWizard={() => handleOpenWizard()} />
-            <AmenitiesSection onOpenWizard={() => handleOpenWizard()} />
-            <ReviewsSection onOpenWizard={() => handleOpenWizard()} />
-            <LocationHoursSection onOpenWizard={() => handleOpenWizard()} />
+            <AboutSection onOpenWizard={handleOpenWizard} darkMode={dm} />
+            <AmenitiesSection onOpenWizard={handleOpenWizard} darkMode={dm} />
+            <CTASection onOpenWizard={handleOpenWizard} darkMode={dm} />
+            <ReviewsSection onOpenWizard={handleOpenWizard} darkMode={dm} />
+            <LocationHoursSection onOpenWizard={handleOpenWizard} darkMode={dm} />
           </>
         )}
       </main>
 
-      {/* Global Footer */}
-      <Footer 
-        onOpenWizard={() => handleOpenWizard()} 
-        onNavigate={handleNavigate}
-      />
+      <Footer onOpenWizard={handleOpenWizard} onNavigate={handleNavigate} darkMode={dm} />
 
-      {/* Quote Request Wizard Modal */}
       <QuoteWizardModal
         isOpen={wizardOpen}
         onClose={handleCloseWizard}
@@ -196,18 +161,30 @@ export default function App() {
         initialService={wizardService}
       />
 
-      {/* Sticky Mobile Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 sm:hidden bg-[#0d1e16]/95 border-t border-[#c5a059]/30 backdrop-blur-md p-2.5 flex items-center gap-2.5 shadow-2xl">
+      {/* Mobile bottom bar */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-30 sm:hidden backdrop-blur-md p-2.5 flex items-center gap-2.5 shadow-2xl border-t"
+        style={{
+          backgroundColor: dm ? 'rgba(12,12,12,0.95)' : 'rgba(245,240,232,0.97)',
+          borderColor: dm ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
+        }}
+      >
         <a
           href={`tel:${BUSINESS_INFO.phoneRaw}`}
-          className="flex-1 py-3 px-3.5 rounded-xl bg-[#142a20] text-[#c5a059] border border-[#c5a059]/30 font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 active:scale-95 transition"
+          className="flex-1 py-3 px-3 rounded-xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition border"
+          style={{
+            backgroundColor: dm ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            borderColor: dm ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.1)',
+            color: dm ? '#c5a059' : '#b8955a',
+          }}
         >
-          <Phone className="w-4 h-4 text-[#c5a059]" />
-          <span>Call Host</span>
+          <Phone className="w-4 h-4" />
+          <span>Call</span>
         </a>
         <button
           onClick={() => handleOpenWizard()}
-          className="flex-1 py-3 px-3.5 rounded-xl bg-[#c5a059] hover:bg-[#d8b46e] text-[#0d1e16] font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 shadow-lg active:scale-95 transition"
+          className="flex-2 flex-1 py-3 px-4 rounded-xl font-bold text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg active:scale-95 transition cursor-pointer"
+          style={{ backgroundColor: '#b8955a', color: '#fff' }}
         >
           <Calendar className="w-4 h-4" />
           <span>Reserve Table</span>

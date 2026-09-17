@@ -1,160 +1,228 @@
-import React from 'react';
-import { ArrowRight, Phone, Utensils, Sparkles, Star, Calendar, Users, MapPin } from '../common/Icons';
-import { BUSINESS_INFO } from '../../data/businessData';
-import { imageManifest } from '../../data/imageManifest';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-export default function Hero({ onOpenWizard }) {
+gsap.registerPlugin(ScrollTrigger);
+
+const THUMBNAIL_DISHES = [
+  { src: '/images/dish-bone-marrow.jpg', label: '"Meat Butter"', sub: 'Scotch Bonnet Bone Marrow' },
+  { src: '/images/dish-lamb-rack.jpg',   label: 'Lamb Rack',    sub: 'Chimichurri Drizzle' },
+];
+
+export default function Hero({ onOpenWizard, darkMode }) {
+  const sectionRef    = useRef(null);
+  const imageRef      = useRef(null);
+  const eyebrowRef    = useRef(null);
+  const titleRef      = useRef(null);
+  const cursiveRef    = useRef(null);
+  const thumbsRef     = useRef(null);
+  const ctaRef        = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.1 });
+
+      /* — Hero text reveal: clip-path slide up — */
+      tl.fromTo(
+        eyebrowRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }
+      )
+      .fromTo(
+        titleRef.current.querySelectorAll('.hero-word'),
+        { y: '110%', opacity: 0 },
+        { y: '0%', opacity: 1, duration: 1, ease: 'power4.out', stagger: 0.08 },
+        '-=0.3'
+      )
+      .fromTo(
+        cursiveRef.current,
+        { opacity: 0, x: -30 },
+        { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' },
+        '-=0.5'
+      )
+      .fromTo(
+        thumbsRef.current,
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', stagger: 0.15 },
+        '-=0.3'
+      )
+      .fromTo(
+        ctaRef.current,
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        '-=0.2'
+      );
+
+      /* — Parallax hero image on scroll — */
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 1.5,
+        onUpdate: (self) => {
+          if (imageRef.current) {
+            gsap.set(imageRef.current, { y: self.progress * 80 });
+          }
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative overflow-hidden bg-[#0d1e16] text-[#f7f4ec] pt-8 pb-16 sm:pb-24 lg:pb-32" aria-label="Culinary Excellence & Table Reservations">
-      {/* Subtle organic ambient gradient & culinary spice texture */}
-      <div className="absolute inset-0 pointer-events-none opacity-40">
-        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[#1e4030] blur-3xl" />
-        <div className="absolute top-1/3 -right-32 w-[32rem] h-[32rem] rounded-full bg-[#183928] blur-3xl" />
-        <div className="absolute -bottom-24 left-1/3 w-80 h-80 rounded-full bg-[#c5a059]/10 blur-3xl" />
+    <section
+      ref={sectionRef}
+      className="relative w-full overflow-hidden"
+      style={{ height: 'calc(100vh - 72px)', minHeight: 520, maxHeight: 920 }}
+      aria-label="The Steak House on The Verandah – Cinematic Hero"
+    >
+      {/* ── Full-bleed background photo with parallax ── */}
+      <div className="absolute inset-0 overflow-hidden">
+        <img
+          ref={imageRef}
+          src="/images/dish-tbone-skillet.jpg"
+          alt="USDA T-Bone sizzling on cast iron at Devon House Verandah"
+          fetchPriority="high"
+          className="w-full h-[115%] object-cover object-center -translate-y-0"
+          style={{ willChange: 'transform' }}
+        />
+        {/* Cinematic overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/75" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Split Grid mirroring template layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center pt-4 sm:pt-8 lg:pt-12">
-          
-          {/* Left Column: Typography & CTAs */}
-          <div className="lg:col-span-7 space-y-6 sm:space-y-8 z-10">
-            {/* Heritage Badge */}
-            <div className="inline-flex items-center space-x-2.5 px-4 py-2 rounded-full bg-[#142a20] border border-[#284d3b] text-xs sm:text-sm font-semibold text-[#c5a059] shadow-sm">
-              <Sparkles className="w-4 h-4 text-[#c5a059]" />
-              <span className="tracking-wide">Devon House Estate · Kingston, Jamaica · Est. 1881</span>
-            </div>
+      {/* ── Stars badge (top-center, Gilded Grill style) ── */}
+      <div
+        ref={eyebrowRef}
+        className="absolute top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 z-10 opacity-0"
+      >
+        <div className="flex gap-1">
+          {[...Array(5)].map((_, i) => (
+            <svg key={i} width="10" height="10" viewBox="0 0 24 24" fill="#d4af37">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          ))}
+        </div>
+        <span className="text-white/70 text-[9px] tracking-[0.35em] uppercase font-bold">
+          The World Famous
+        </span>
+      </div>
 
-            {/* Headline */}
-            <div className="space-y-2">
-              <span className="font-cursive-accent text-2xl sm:text-3xl text-[#c5a059] italic block">
-                Exceptional Chophouse & Terroir Dining
-              </span>
-              <h1 className="font-serif-luxury text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-[#f7f4ec] leading-[1.08]">
-                The Steak House <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f7f4ec] via-[#e2c585] to-[#c5a059]">
-                  on The Verandah
+      {/* ── Central title block ── */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
+        <div ref={titleRef} className="text-center overflow-hidden">
+          {/* Main title – each word individually animated */}
+          <h1 className="font-serif text-white font-bold leading-none select-none">
+            {['THE', 'STEAK HOUSE'].map((word, i) => (
+              <div key={i} className="overflow-hidden">
+                <span
+                  className="hero-word inline-block"
+                  style={{
+                    fontSize: 'clamp(3rem, 9vw, 8.5rem)',
+                    letterSpacing: '0.04em',
+                  }}
+                >
+                  {word}
                 </span>
-              </h1>
-            </div>
-
-            {/* Description */}
-            <p className="text-base sm:text-xl text-[#ded7c8] max-w-2xl leading-relaxed font-light">
-              Experience Jamaica’s premier chophouse nestled on the sweeping open-air verandah of historic Devon House. Hand-selected Himalayan salt dry-aged steaks, pimento charcoal grilling, and visionary Caribbean fusion.
-            </p>
-
-            {/* Culinary Director endorsement pill */}
-            <div className="flex items-center space-x-4 p-3.5 rounded-2xl bg-[#142a20]/80 border border-[#284d3b] max-w-lg">
-              <img 
-                src="/images/chef-plating.jpg" 
-                alt="Chef Brian - Executive Chef" 
-                className="w-12 h-12 rounded-xl object-cover border border-[#c5a059]" 
-              />
-              <div>
-                <p className="text-xs uppercase tracking-widest text-[#c5a059] font-semibold">Executive Curation</p>
-                <p className="text-sm font-medium text-[#f7f4ec]">"Every cut is seasoned with Jamaican pimento smoke and mountain herbs."</p>
               </div>
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-              <button
-                onClick={() => onOpenWizard()}
-                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#c5a059] via-[#d4af37] to-[#9d7a36] text-[#0a1711] font-bold text-base tracking-wide flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl hover:brightness-110 active:scale-95 transition cursor-pointer"
-                aria-label="Reserve a Verandah Table"
+            ))}
+            <div className="overflow-hidden mt-1">
+              <span
+                className="hero-word inline-block text-[#d4af37]"
+                style={{
+                  fontSize: 'clamp(1.1rem, 2.5vw, 2rem)',
+                  letterSpacing: '0.35em',
+                  fontWeight: 400,
+                }}
               >
-                <span>Reserve a Verandah Table</span>
-                <ArrowRight className="w-5 h-5 text-[#0a1711]" />
-              </button>
-
-              <a
-                href="#menu"
-                className="px-7 py-4 rounded-2xl bg-[#142a20] hover:bg-[#1a372a] text-[#f7f4ec] font-semibold text-base border border-[#284d3b] hover:border-[#c5a059] transition flex items-center justify-center space-x-2.5 active:scale-95 cursor-pointer"
-              >
-                <span>Explore Tasting Menu</span>
-              </a>
+                ON THE VERANDAH
+              </span>
             </div>
+          </h1>
 
-            {/* Social Proof */}
-            <div className="flex items-center space-x-3 text-xs sm:text-sm text-[#ded7c8] pt-1">
-              <div className="flex text-[#c5a059]" aria-label="5 stars">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-[#c5a059] fill-[#c5a059]" />
-                ))}
-              </div>
-              <span className="font-medium">4.9 Star Landmark Rating · Kingston's Premier Dining Experience</span>
-            </div>
-          </div>
-
-          {/* Right Column: Culinary Centerpiece Plate matching template top dish */}
-          <div className="lg:col-span-5 relative flex justify-center items-center">
-            {/* Ambient culinary halo */}
-            <div className="absolute w-72 sm:w-96 h-72 sm:h-96 rounded-full bg-[#1b3d2b] blur-2xl opacity-60" />
-
-            {/* Master Centerpiece Plate Container */}
-            <div className="relative group max-w-md sm:max-w-lg w-full">
-              <div className="relative rounded-full p-3 sm:p-4 bg-gradient-to-b from-[#284d3b] to-[#142a20] shadow-2xl border border-[#c5a059]/40">
-                <img
-                  src={imageManifest.hero.poster}
-                  alt="Artisanal Steak & Caribbean Fusion Dish on Ceramic Plate"
-                  fetchPriority="high"
-                  className="w-full h-auto aspect-square object-cover rounded-full shadow-2xl transform transition duration-700 group-hover:rotate-3 group-hover:scale-102"
-                />
-              </div>
-
-              {/* Floating Culinary Highlight Tag 1 */}
-              <div className="absolute -top-3 sm:top-2 -left-2 sm:-left-6 px-4 py-2.5 rounded-2xl bg-[#142a20]/95 backdrop-blur-md border border-[#c5a059]/60 shadow-xl flex items-center space-x-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#c5a059] animate-pulse" />
-                <span className="text-xs sm:text-sm font-semibold text-[#f7f4ec]">16oz USDA Sizzling Ribeye</span>
-              </div>
-
-              {/* Floating Highlight Tag 2 */}
-              <div className="absolute -bottom-4 sm:bottom-4 -right-2 sm:-right-6 px-4 py-2.5 rounded-2xl bg-[#142a20]/95 backdrop-blur-md border border-[#284d3b] shadow-xl flex items-center space-x-2.5">
-                <Utensils className="w-4 h-4 text-[#c5a059]" />
-                <span className="text-xs sm:text-sm font-semibold text-[#f7f4ec]">Broiled "Meat Butter" Marrow</span>
-              </div>
-            </div>
-          </div>
+          {/* Cursive signature overlay (Gilded Grill DNA) */}
+          <p
+            ref={cursiveRef}
+            className="font-cursive text-[#d4af37]/80 mt-4 opacity-0"
+            style={{ fontSize: 'clamp(1.4rem, 3.5vw, 2.8rem)', fontStyle: 'italic' }}
+          >
+            Devon House Estate · Kingston, Jamaica
+          </p>
         </div>
 
-        {/* Quick Table Concierge Floating Bar */}
-        <div className="mt-14 sm:mt-20 relative z-20">
-          <div className="card-thick p-5 sm:p-7 border border-[#284d3b]">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-5">
-              
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto flex-1">
-                {/* Location item */}
-                <div className="flex items-center space-x-3.5 px-4 py-3 bg-[#0d1e16] rounded-2xl border border-[#284d3b] w-full sm:w-1/2">
-                  <MapPin className="w-5 h-5 text-[#c5a059] shrink-0" />
-                  <div className="text-left">
-                    <p className="text-[11px] uppercase tracking-wider text-[#a3b8ad] font-medium">Estate Location</p>
-                    <p className="text-sm font-semibold text-[#f7f4ec] truncate">Devon House, Kingston 10</p>
-                  </div>
-                </div>
-
-                {/* Seating preference item */}
-                <div className="flex items-center space-x-3.5 px-4 py-3 bg-[#0d1e16] rounded-2xl border border-[#284d3b] w-full sm:w-1/2">
-                  <Users className="w-5 h-5 text-[#c5a059] shrink-0" />
-                  <div className="text-left">
-                    <p className="text-[11px] uppercase tracking-wider text-[#a3b8ad] font-medium">Seating Setting</p>
-                    <p className="text-sm font-semibold text-[#f7f4ec] truncate">Historic Verandah & Garden</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Button */}
-              <button
-                onClick={() => onOpenWizard()}
-                className="w-full lg:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-[#c5a059] to-[#9d7a36] text-[#0a1711] font-bold text-sm sm:text-base tracking-wide shadow-md hover:brightness-110 active:scale-95 transition shrink-0 cursor-pointer"
-                aria-label="Check Table Availability"
-              >
-                Check Table Availability
-              </button>
-            </div>
-          </div>
+        {/* CTA buttons */}
+        <div
+          ref={ctaRef}
+          className="mt-8 flex flex-col sm:flex-row items-center gap-4 opacity-0"
+        >
+          <button
+            onClick={() => onOpenWizard()}
+            className="px-8 py-3.5 rounded-full bg-white text-black text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-[#f5f0e8] transition-all duration-200 shadow-lg cursor-pointer"
+          >
+            Reserve Your Table
+          </button>
+          <a
+            href="#menu"
+            className="px-8 py-3.5 rounded-full border border-white/70 text-white text-[11px] font-bold tracking-[0.2em] uppercase hover:bg-white/10 transition-all duration-200 cursor-pointer"
+          >
+            View Our Menu
+          </a>
         </div>
-
       </div>
+
+      {/* ── Thumbnail dish cards – bottom-right (Gilded Grill signature) ── */}
+      <div
+        ref={thumbsRef}
+        className="absolute bottom-6 right-4 sm:right-8 z-10 flex gap-3 opacity-0"
+      >
+        {THUMBNAIL_DISHES.map((dish, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-2.5 px-3 py-2 rounded-xl backdrop-blur-md cursor-pointer hover:scale-105 transition-transform duration-200"
+            style={{ background: 'rgba(0,0,0,0.55)', border: '1px solid rgba(255,255,255,0.15)' }}
+            onClick={() => onOpenWizard()}
+          >
+            <img
+              src={dish.src}
+              alt={dish.label}
+              className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+            />
+            <div>
+              <p className="text-[10px] font-bold text-[#d4af37] uppercase tracking-wider leading-none">
+                {dish.label}
+              </p>
+              <p className="text-[9px] text-white/60 mt-0.5 leading-tight max-w-[100px]">
+                {dish.sub}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── Scroll indicator ── */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+        <div
+          className="w-px h-12 relative overflow-hidden"
+          style={{ background: 'rgba(255,255,255,0.15)' }}
+        >
+          <div
+            className="absolute top-0 left-0 w-full bg-[#d4af37]"
+            style={{
+              height: '40%',
+              animation: 'scrollIndicator 2s ease-in-out infinite',
+            }}
+          />
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes scrollIndicator {
+          0%   { transform: translateY(-100%); opacity: 0; }
+          30%  { opacity: 1; }
+          70%  { opacity: 1; }
+          100% { transform: translateY(300%); opacity: 0; }
+        }
+      `}</style>
     </section>
   );
 }

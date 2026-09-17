@@ -1,154 +1,129 @@
 import React from 'react';
-import { MapPin, Clock, Navigation, Phone, ExternalLink, Mail, Utensils } from '../common/Icons';
+import { MapPin, Clock, Phone, ExternalLink, Navigation, Mail } from '../common/Icons';
 import { BUSINESS_INFO, isOpenNow } from '../../data/businessData';
 
-export default function LocationHoursSection({ onOpenWizard }) {
+export default function LocationHoursSection({ onOpenWizard, darkMode }) {
   const open = isOpenNow();
-  const currentDayIndex = new Date().getDay();
-  const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const currentDayName = dayNames[currentDayIndex];
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const currentDayName = dayNames[new Date().getDay()];
+
+  const bg  = darkMode ? 'bg-[#0c0c0c]' : 'bg-[#ece5d6]';
+  const txt = darkMode ? 'text-[#f7f4ec]' : 'text-black';
+  const sub = darkMode ? 'text-white/50'  : 'text-black/50';
+  const acc = darkMode ? 'text-[#c5a059]' : 'text-[#b8955a]';
+  const cardBg = darkMode ? 'bg-white/3 border-white/6' : 'bg-white/60 border-black/8';
+  const bdr = darkMode ? 'border-white/8' : 'border-black/8';
 
   return (
-    <section id="location" className="py-20 sm:py-28 bg-[#0d1e16] text-[#f7f4ec] transition-colors" aria-labelledby="location-heading">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14 sm:mb-18">
-          <span className="font-cursive-accent text-2xl sm:text-3xl text-[#c5a059] italic block mb-1">
-            Devon House Estate, Kingston 10
-          </span>
-          <h2 id="location-heading" className="font-serif-luxury text-3xl sm:text-5xl font-bold tracking-tight text-[#f7f4ec]">
-            Hours & Directions
+    <section
+      id="location"
+      className={`py-24 sm:py-32 transition-colors duration-300 ${bg}`}
+      aria-labelledby="location-heading"
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        {/* Header */}
+        <div className="text-center mb-14">
+          <p className={`micro-label mb-3 ${acc}`}>Devon House Estate, Kingston 10</p>
+          <h2
+            id="location-heading"
+            className={`font-serif font-bold ${txt}`}
+            style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}
+          >
+            Hours &amp; Location
           </h2>
-          <p className="text-[#ded7c8] mt-3 sm:mt-4 text-base sm:text-lg leading-relaxed font-light">
-            Dine on the historic terrace of Devon House at 26 Hope Road. Reserved estate parking & valet available for all dining patrons.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Hours & Contact Card */}
-          <div className="lg:col-span-5 card-thick p-6 sm:p-8 space-y-6 flex flex-col justify-between border border-[#284d3b]">
-            <div>
-              {/* Open/Closed Status */}
-              <div className="flex items-center justify-between p-4 rounded-2xl bg-[#0a1711] border border-[#284d3b] mb-6">
-                <div className="flex items-center space-x-3.5">
-                  <span className={`w-3.5 h-3.5 rounded-full ${open ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} aria-hidden="true" />
-                  <div>
-                    <span className={`font-bold text-base sm:text-lg block ${open ? 'text-emerald-300' : 'text-amber-300'}`}>
-                      {open ? 'Verandah Open for Service' : 'Closed for Pre-Service Prep'}
-                    </span>
-                    <span className="text-xs text-[#a3b8ad]">Today is {currentDayName}</span>
-                  </div>
-                </div>
-                <Clock className="w-6 h-6 text-[#c5a059]" aria-hidden="true" />
-              </div>
-
-              {/* Hours Table */}
-              <div>
-                <h3 className="text-xs sm:text-sm font-bold text-[#c5a059] uppercase tracking-wider mb-3">
-                  Dining Hours
-                </h3>
-                <div className="divide-y divide-[#284d3b]/60 text-sm">
-                  {BUSINESS_INFO.hours.map((h) => {
-                    const isToday = h.day.toLowerCase() === currentDayName.toLowerCase();
-                    return (
-                      <div
-                        key={h.day}
-                        className={`py-2.5 px-3 flex justify-between items-center rounded-xl transition ${
-                          isToday 
-                            ? 'bg-[#1a372a] font-semibold text-[#f7f4ec] border border-[#c5a059]/40' 
-                            : 'text-[#ded7c8]'
-                        }`}
-                      >
-                        <span className={isToday ? 'text-[#c5a059] font-bold' : ''}>
-                          {h.day}
-                        </span>
-                        <div className="text-right">
-                          <span className={h.open === 'Closed' ? 'text-amber-300/80 font-medium' : 'text-[#f7f4ec]'}>
-                            {h.open === 'Closed' ? 'Closed (Private Events)' : `${h.open} – ${h.close}`}
-                          </span>
-                          {h.note && (
-                            <span className="block text-[11px] text-[#a3b8ad] font-normal">{h.note}</span>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Contact Links */}
-              <div className="pt-6 border-t border-[#284d3b] space-y-3">
-                <a
-                  href={`tel:${BUSINESS_INFO.phone.replace(/[^0-9]/g, '')}`}
-                  className="flex items-center space-x-3 text-sm text-[#ded7c8] hover:text-[#c5a059] transition"
-                >
-                  <Phone className="w-4 h-4 text-[#c5a059]" />
-                  <span>Main Reservations: {BUSINESS_INFO.phone}</span>
-                </a>
-                <a
-                  href={`tel:${BUSINESS_INFO.secondaryPhone.replace(/[^0-9]/g, '')}`}
-                  className="flex items-center space-x-3 text-sm text-[#ded7c8] hover:text-[#c5a059] transition"
-                >
-                  <Phone className="w-4 h-4 text-[#c5a059]" />
-                  <span>Cellar & Events: {BUSINESS_INFO.secondaryPhone}</span>
-                </a>
-                <a
-                  href={`mailto:${BUSINESS_INFO.email}`}
-                  className="flex items-center space-x-3 text-sm text-[#ded7c8] hover:text-[#c5a059] transition"
-                >
-                  <Mail className="w-4 h-4 text-[#c5a059]" />
-                  <span>{BUSINESS_INFO.email}</span>
-                </a>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          {/* Hours + Contact */}
+          <div className={`rounded-2xl border p-8 sm:p-10 flex flex-col justify-between ${cardBg}`}>
+            {/* Open/Closed badge */}
+            <div className={`flex items-center gap-2.5 mb-8 pb-6 border-b ${bdr}`}>
+              <span className={`w-2 h-2 rounded-full flex-shrink-0 ${open ? 'bg-emerald-500 animate-pulse-slow' : 'bg-amber-400'}`} />
+              <span className={`text-xs font-semibold tracking-widest uppercase ${open ? (darkMode ? 'text-emerald-400' : 'text-emerald-600') : (darkMode ? 'text-amber-300' : 'text-amber-600')}`}>
+                {open ? 'Open Now' : 'Currently Closed'}
+              </span>
+              <span className={`text-xs ml-auto ${sub}`}>Today: {currentDayName}</span>
             </div>
 
-            {/* Directions Link */}
-            <a
-              href={BUSINESS_INFO.googleMapsLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3.5 rounded-2xl bg-[#0a1711] hover:bg-[#142a20] text-[#f7f4ec] font-bold text-sm border border-[#284d3b] hover:border-[#c5a059] transition flex items-center justify-center space-x-2 shadow-sm active:scale-95"
-            >
-              <Navigation className="w-4 h-4 text-[#c5a059]" />
-              <span>Get Directions to Devon House</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#a3b8ad]" />
-            </a>
+            {/* Hours table */}
+            <div className="space-y-0 mb-8">
+              <p className={`micro-label mb-4 ${acc}`}>Dining Hours</p>
+              {BUSINESS_INFO.hours.map((h) => {
+                const isToday = h.day.toLowerCase() === currentDayName.toLowerCase();
+                return (
+                  <div
+                    key={h.day}
+                    className={`py-3 border-b flex justify-between items-center text-sm ${bdr} ${
+                      isToday ? (darkMode ? 'text-[#c5a059]' : 'text-[#b8955a] font-semibold') : ''
+                    }`}
+                  >
+                    <span className={isToday ? 'font-bold' : (darkMode ? 'text-white/70' : 'text-black/70')}>
+                      {h.day}
+                    </span>
+                    <span className={h.open === 'Closed' ? (darkMode ? 'text-amber-300/70' : 'text-amber-600') : (darkMode ? 'text-white/60' : 'text-black/60')}>
+                      {h.open === 'Closed' ? 'Closed' : `${h.open} – ${h.close}`}
+                      {h.note && <span className={`block text-[10px] ${sub}`}>{h.note}</span>}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Contact */}
+            <div className={`space-y-3 pt-6 border-t ${bdr}`}>
+              <a href={`tel:${BUSINESS_INFO.phone.replace(/[^0-9]/g,'')}`} className={`flex items-center gap-3 text-sm transition-colors ${darkMode ? 'text-white/60 hover:text-[#c5a059]' : 'text-black/60 hover:text-black'}`}>
+                <Phone className="w-4 h-4 flex-shrink-0" />
+                {BUSINESS_INFO.phone}
+              </a>
+              <a href={`tel:${BUSINESS_INFO.secondaryPhone.replace(/[^0-9]/g,'')}`} className={`flex items-center gap-3 text-sm transition-colors ${darkMode ? 'text-white/60 hover:text-[#c5a059]' : 'text-black/60 hover:text-black'}`}>
+                <Phone className="w-4 h-4 flex-shrink-0" />
+                {BUSINESS_INFO.secondaryPhone}
+              </a>
+              <a href={`mailto:${BUSINESS_INFO.email}`} className={`flex items-center gap-3 text-sm transition-colors ${darkMode ? 'text-white/60 hover:text-[#c5a059]' : 'text-black/60 hover:text-black'}`}>
+                <Mail className="w-4 h-4 flex-shrink-0" />
+                {BUSINESS_INFO.email}
+              </a>
+              <a
+                href={BUSINESS_INFO.googleMapsLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-3 text-sm transition-colors ${darkMode ? 'text-white/60 hover:text-[#c5a059]' : 'text-black/60 hover:text-black'}`}
+              >
+                <Navigation className="w-4 h-4 flex-shrink-0" />
+                26 Hope Road, Kingston 10
+                <ExternalLink className="w-3 h-3 ml-auto opacity-50" />
+              </a>
+            </div>
           </div>
 
-          {/* Interactive Google Map */}
-          <div className="lg:col-span-7 card-thick overflow-hidden border border-[#284d3b] flex flex-col">
-            <div className="px-5 py-4 border-b border-[#284d3b] flex items-center justify-between bg-[#0a1711]">
-              <span className="font-serif-luxury text-sm sm:text-base text-[#f7f4ec] font-bold">
-                📍 Devon House, 26 Hope Road, Kingston 10, Jamaica
+          {/* Map embed */}
+          <div className={`rounded-2xl border overflow-hidden ${cardBg}`}>
+            <div className={`px-5 py-3 border-b flex items-center justify-between ${bdr}`}>
+              <span className={`text-[11px] font-semibold tracking-wider uppercase ${sub}`}>
+                Devon House · 26 Hope Road, Kingston 10
               </span>
               <a
                 href={BUSINESS_INFO.googleMapsLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#c5a059] hover:text-[#e2c585] font-bold text-xs sm:text-sm flex items-center space-x-1"
-                aria-label="Open location in Google Maps"
+                className={`text-[10px] font-bold tracking-wider uppercase flex items-center gap-1 transition-colors ${acc}`}
               >
-                <span>Google Maps</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                Maps <ExternalLink className="w-3 h-3" />
               </a>
             </div>
-            <div className="w-full flex-1 min-h-[340px] sm:min-h-[420px]">
-              <iframe
-                title="The Steak House on The Verandah at Devon House Map"
-                src="https://maps.google.com/maps?q=18.0148763,-76.7898652&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full min-h-[340px] sm:min-h-[420px]"
-              />
-            </div>
+            <iframe
+              title="Steak House on The Verandah Map"
+              src="https://maps.google.com/maps?q=18.0148763,-76.7898652&t=&z=16&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: 400 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="w-full"
+            />
           </div>
         </div>
-
       </div>
     </section>
   );

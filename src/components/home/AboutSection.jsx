@@ -1,84 +1,137 @@
-import React from 'react';
-import { Quote, Sparkles, ArrowRight } from '../common/Icons';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { BUSINESS_INFO } from '../../data/businessData';
 
-export default function AboutSection({ onOpenWizard }) {
-  return (
-    <section id="about" className="py-20 sm:py-28 bg-[#0d1e16] text-[#f7f4ec] transition-colors" aria-labelledby="about-heading">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
-          {/* Left: Devon House Estate & Verandah Imagery */}
-          <div className="lg:col-span-6 relative">
-            <div className="card-thick overflow-hidden p-2 border border-[#284d3b]">
-              <img
-                src="/images/verandah-terrace.jpg"
-                alt="Historic Devon House Verandah Dining Terrace in Kingston, Jamaica"
-                loading="lazy"
-                decoding="async"
-                width="640"
-                height="460"
-                className="w-full h-80 sm:h-96 lg:h-[460px] object-cover rounded-2xl"
-              />
-            </div>
+gsap.registerPlugin(ScrollTrigger);
 
-            {/* Floating Heritage Stat Badge */}
-            <div className="absolute -bottom-6 right-4 sm:right-8 bg-[#142a20]/95 backdrop-blur-md rounded-2xl shadow-2xl border border-[#c5a059]/60 px-6 py-4">
-              <div className="font-serif-luxury text-2xl sm:text-3xl font-bold text-[#c5a059]">1881</div>
-              <div className="text-xs sm:text-sm text-[#ded7c8] font-medium">Historic Devon House Estate</div>
+const PILLARS = [
+  {
+    no: '01',
+    title: 'Himalayan Salt Dry-Aging',
+    body: 'In-house controlled curing chambers where USDA Prime cuts develop a deep, concentrated umami over 21–45 days.',
+  },
+  {
+    no: '02',
+    title: 'Pimento Charcoal Grilling',
+    body: 'Authentic Jamaican pimento wood coals impart a smoky, aromatic char unique to the Caribbean tradition.',
+  },
+  {
+    no: '03',
+    title: 'Historic Open Verandah',
+    body: 'Al-fresco dining on the sweeping verandah of George Stiebel\'s 1881 colonial estate — a Kingston landmark.',
+  },
+];
+
+export default function AboutSection({ onOpenWizard, darkMode }) {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        sectionRef.current.querySelectorAll('.about-fade'),
+        { opacity: 0, y: 36 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 72%',
+            once: true,
+          },
+        }
+      );
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  const bg  = darkMode ? 'bg-[#111]'         : 'bg-white';
+  const txt = darkMode ? 'text-[#f7f4ec]'    : 'text-black';
+  const sub = darkMode ? 'text-white/50'     : 'text-black/50';
+  const acc = darkMode ? 'text-[#c5a059]'    : 'text-[#b8955a]';
+  const bdr = darkMode ? 'border-white/8'    : 'border-black/8';
+
+  return (
+    <section
+      id="about"
+      ref={sectionRef}
+      className={`py-24 sm:py-32 transition-colors duration-300 ${bg}`}
+      aria-labelledby="about-heading"
+    >
+      <div className="max-w-7xl mx-auto px-5 sm:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+
+          {/* Left: Image */}
+          <div className="about-fade relative overflow-hidden rounded-2xl" style={{ opacity: 0 }}>
+            <img
+              src="/images/verandah-terrace.jpg"
+              alt="Historic Devon House Verandah"
+              loading="lazy"
+              className="w-full h-[480px] object-cover object-center"
+            />
+            {/* Heritage badge */}
+            <div className={`absolute bottom-6 left-6 px-5 py-3 rounded-xl backdrop-blur-md ${
+              darkMode ? 'bg-black/70 border border-white/10' : 'bg-white/85 border border-black/10'
+            }`}>
+              <p className={`font-serif text-3xl font-bold ${acc}`}>1881</p>
+              <p className={`text-[10px] tracking-[0.2em] uppercase font-semibold mt-0.5 ${sub}`}>
+                Devon House Established
+              </p>
             </div>
           </div>
 
-          {/* Right: Heritage Story & Culinary Vision */}
-          <div className="lg:col-span-6 space-y-6">
-            <span className="font-cursive-accent text-2xl sm:text-3xl text-[#c5a059] italic block">
-              The Heritage of the Verandah
-            </span>
-
-            <h2 id="about-heading" className="font-serif-luxury text-3xl sm:text-4xl lg:text-5xl font-bold text-[#f7f4ec] tracking-tight leading-tight">
-              A Chophouse Born Within Jamaican History
-            </h2>
-
-            {/* Chef Quote */}
-            <div className="border-l-4 border-[#c5a059] pl-5 sm:pl-6 py-2 bg-[#142a20]/60 rounded-r-2xl">
-              <Quote className="w-5 h-5 text-[#c5a059] mb-2" aria-hidden="true" />
-              <p className="text-[#ded7c8] text-sm sm:text-base italic leading-relaxed font-light">
-                "{BUSINESS_INFO.owner.quote}"
-              </p>
-              <div className="mt-3 text-xs sm:text-sm font-bold text-[#c5a059]">
-                — {BUSINESS_INFO.owner.name}
-              </div>
+          {/* Right: Story */}
+          <div className="space-y-8">
+            <div className="about-fade" style={{ opacity: 0 }}>
+              <p className={`micro-label mb-2 ${acc}`}>Our Heritage</p>
+              <h2
+                id="about-heading"
+                className={`font-serif font-bold leading-tight ${txt}`}
+                style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+              >
+                A Chophouse Born<br />Within Jamaican History
+              </h2>
             </div>
 
-            <p className="text-[#ded7c8] text-sm sm:text-base leading-relaxed font-light">
-              Devon House was constructed in 1881 by George Stiebel, Jamaica's first millionaire of African descent. Today, The Steak House on The Verandah pays tribute to this enduring architectural wonder by offering a fine dining chophouse that unites classic USDA Prime dry-aging with the bold flavors of the West Indies.
+            <p className={`about-fade text-sm sm:text-base leading-relaxed font-light ${sub}`} style={{ opacity: 0 }}>
+              Devon House was constructed in 1881 by George Stiebel, Jamaica's first Black millionaire. 
+              Today, The Steak House on The Verandah pays tribute to this enduring landmark — uniting 
+              USDA Prime dry-aged cuts with the bold spice traditions of the West Indies.
             </p>
 
-            {/* Key Milestones */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-              <div className="p-3.5 rounded-xl bg-[#142a20] border border-[#284d3b] space-y-1">
-                <span className="text-xs font-bold text-[#c5a059]">Himalayan Salt Dry-Aging</span>
-                <p className="text-xs text-[#a3b8ad]">In-house controlled curing for deep, concentrated umami perfection.</p>
-              </div>
-              <div className="p-3.5 rounded-xl bg-[#142a20] border border-[#284d3b] space-y-1">
-                <span className="text-xs font-bold text-[#c5a059]">Historic Open Verandah</span>
-                <p className="text-xs text-[#a3b8ad]">Tropical garden breezes, ambient lighting, and acoustic melodies.</p>
-              </div>
+            {/* Three pillars (editorial numbered, Gilded Grill aesthetic) */}
+            <div className={`space-y-0 border-t ${bdr}`}>
+              {PILLARS.map((p, i) => (
+                <div
+                  key={i}
+                  className={`about-fade py-5 border-b flex gap-5 items-start ${bdr}`}
+                  style={{ opacity: 0 }}
+                >
+                  <span className={`font-serif text-4xl font-bold leading-none ${acc} opacity-30 flex-shrink-0 w-10`}>
+                    {p.no}
+                  </span>
+                  <div>
+                    <h3 className={`font-semibold text-sm tracking-wide mb-1 ${txt}`}>{p.title}</h3>
+                    <p className={`text-xs leading-relaxed ${sub}`}>{p.body}</p>
+                  </div>
+                </div>
+              ))}
             </div>
 
-            {/* CTA */}
-            <div className="pt-3">
+            <div className="about-fade" style={{ opacity: 0 }}>
               <button
                 onClick={() => onOpenWizard()}
-                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#c5a059] to-[#9d7a36] text-[#0a1711] font-bold text-sm sm:text-base tracking-wide shadow-md hover:brightness-110 active:scale-95 transition flex items-center space-x-2.5 cursor-pointer"
-                aria-label="Reserve your verandah table"
+                className={`btn-pill ${darkMode ? 'border-white/30 text-white hover:bg-white hover:text-black' : ''}`}
               >
-                <span>Reserve Your Verandah Experience</span>
-                <ArrowRight className="w-4 h-4 text-[#0a1711]" />
+                Reserve Your Experience
               </button>
             </div>
-
           </div>
+
         </div>
       </div>
     </section>

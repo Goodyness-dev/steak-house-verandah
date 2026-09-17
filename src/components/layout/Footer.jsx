@@ -1,16 +1,15 @@
 import React from 'react';
-import { Phone, MapPin, ChevronRight, Utensils, Mail, Clock, VerandahLogo } from '../common/Icons';
+import { Phone, MapPin, Mail, ChevronRight, VerandahLogo } from '../common/Icons';
 import { BUSINESS_INFO } from '../../data/businessData';
 
-export default function Footer({ onOpenWizard, onNavigate }) {
-  const handleLinkClick = (e, target) => {
+export default function Footer({ onOpenWizard, onNavigate, darkMode }) {
+  const handleLink = (e, target) => {
     e.preventDefault();
     if (target === 'services') {
       if (onNavigate) onNavigate('services');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-
     if (onNavigate) onNavigate('home');
     setTimeout(() => {
       const el = document.querySelector(target);
@@ -18,187 +17,112 @@ export default function Footer({ onOpenWizard, onNavigate }) {
     }, 100);
   };
 
-  return (
-    <footer className="bg-[#08130e] text-[#a3b8ad] text-sm sm:text-base pb-16 sm:pb-0 border-t border-[#1d382b]" role="contentinfo">
-      {/* Pre-footer Reserve Bar */}
-      <div className="bg-gradient-to-r from-[#142a20] via-[#1a372a] to-[#142a20] py-12 px-4 sm:px-6 lg:px-8 border-b border-[#284d3b]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <span className="font-cursive-accent text-xl text-[#c5a059] italic block mb-1">
-              Table & Private Gazebo Reservations
-            </span>
-            <h3 className="font-serif-luxury text-2xl sm:text-3xl font-bold text-[#f7f4ec] tracking-tight">
-              An Evening of Distinction on Devon House Verandah
-            </h3>
-            <p className="text-[#ded7c8] mt-1 text-sm sm:text-base font-light">
-              Reserve your terrace table, anniversary celebration, or cellar tasting in advance.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row items-center gap-3.5 w-full md:w-auto shrink-0">
-            <button
-              onClick={() => onOpenWizard()}
-              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#c5a059] to-[#9d7a36] text-[#0a1711] font-bold text-sm sm:text-base hover:brightness-110 active:scale-95 transition shadow-lg text-center cursor-pointer"
-              aria-label="Reserve a Verandah Table"
-            >
-              Reserve a Verandah Table
-            </button>
-            <a
-              href={`tel:${BUSINESS_INFO.phone.replace(/[^0-9]/g, '')}`}
-              className="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-[#0d1e16] hover:bg-[#142a20] text-[#f7f4ec] font-bold text-sm sm:text-base transition border border-[#284d3b] hover:border-[#c5a059] flex items-center justify-center space-x-2.5 active:scale-95 text-center cursor-pointer"
-              aria-label={`Call reservations ${BUSINESS_INFO.phone}`}
-            >
-              <Phone className="w-4 h-4 text-[#c5a059]" />
-              <span>{BUSINESS_INFO.phone}</span>
-            </a>
-          </div>
-        </div>
-      </div>
+  const bg  = darkMode ? 'bg-[#0a0a0a]'  : 'bg-[#0d0d0d]';
+  const txt = '#f7f4ec';
+  const sub = 'rgba(255,255,255,0.45)';
+  const acc = darkMode ? '#c5a059' : '#b8955a';
+  const bdr = 'rgba(255,255,255,0.06)';
 
-      {/* Main Footer Columns */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+  const links = [
+    { label: 'Tasting Menu',        target: 'services' },
+    { label: 'Devon Heritage',      target: '#about' },
+    { label: 'The Experience',      target: '#amenities' },
+    { label: 'Hours & Location',    target: '#location' },
+    { label: 'Guest Accolades',     target: '#reviews' },
+  ];
+
+  return (
+    <footer className={`${bg} pb-16 sm:pb-0`} style={{ borderTop: `1px solid ${bdr}` }} role="contentinfo">
+      
+      {/* Main grid */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        
         {/* Brand */}
-        <div className="space-y-4">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-[#142a20] border border-[#c5a059] flex items-center justify-center p-1.5">
-              <VerandahLogo className="w-6 h-6 text-[#c5a059]" />
+        <div className="lg:col-span-2 space-y-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ border: `1px solid rgba(197,160,89,0.4)`, background: 'rgba(255,255,255,0.04)' }}>
+              <VerandahLogo className="w-5 h-5" style={{ color: acc }} />
             </div>
             <div>
-              <span className="font-serif-luxury font-bold text-white text-base block">
+              <span className="font-serif font-bold text-sm uppercase tracking-widest block" style={{ color: txt }}>
                 The Steak House
               </span>
-              <span className="text-xs text-[#c5a059] uppercase tracking-widest block">
+              <span className="text-[10px] tracking-[0.22em] uppercase font-medium block -mt-0.5" style={{ color: acc }}>
                 On The Verandah
               </span>
             </div>
           </div>
-          <p className="text-xs sm:text-sm text-[#a3b8ad] leading-relaxed font-light">
-            Located at the historic 1881 Devon House estate in Kingston, Jamaica. Offering prime dry-aged chophouse cuts, Caribbean fusion cuisine, and colonial terrace ambiance.
+          <p className="text-sm leading-relaxed font-light max-w-sm" style={{ color: sub }}>
+            Located at the historic 1881 Devon House estate in Kingston, Jamaica — prime dry-aged steaks, Caribbean fusion, and al-fresco colonial terrace dining.
           </p>
-          <div className="pt-1">
-            <span className="text-xs text-[#c5a059] font-medium block">Executive Chef Brian & Culinary Guild</span>
+          <div>
+            <button
+              onClick={() => onOpenWizard()}
+              className="px-6 py-2.5 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase cursor-pointer transition-all hover:opacity-80"
+              style={{ border: `1.5px solid ${acc}`, color: acc, background: 'transparent' }}
+            >
+              Reserve a Table
+            </button>
           </div>
         </div>
 
-        {/* Quick Links */}
+        {/* Quick links */}
         <div>
-          <h4 className="font-serif-luxury text-[#f7f4ec] font-bold text-sm uppercase tracking-wider mb-4">The Verandah</h4>
-          <ul className="space-y-2.5 text-xs sm:text-sm">
-            <li>
-              <button 
-                onClick={(e) => handleLinkClick(e, 'services')} 
-                className="hover:text-[#c5a059] transition cursor-pointer"
-              >
-                Degustation & Tasting Menu
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={(e) => handleLinkClick(e, '#about')} 
-                className="hover:text-[#c5a059] transition cursor-pointer"
-              >
-                Devon House Heritage (1881)
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={(e) => handleLinkClick(e, '#amenities')} 
-                className="hover:text-[#c5a059] transition cursor-pointer"
-              >
-                Terrace & Private Gazebo
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={(e) => handleLinkClick(e, '#location')} 
-                className="hover:text-[#c5a059] transition cursor-pointer"
-              >
-                Hours & Driving Directions
-              </button>
-            </li>
-            <li>
-              <button 
-                onClick={(e) => handleLinkClick(e, '#reviews')} 
-                className="hover:text-[#c5a059] transition cursor-pointer"
-              >
-                Guest Accolades & Press
-              </button>
-            </li>
+          <h4 className="text-[10px] font-bold tracking-[0.25em] uppercase mb-5" style={{ color: acc }}>
+            Explore
+          </h4>
+          <ul className="space-y-3">
+            {links.map(l => (
+              <li key={l.label}>
+                <button
+                  onClick={(e) => handleLink(e, l.target)}
+                  className="text-xs font-medium transition-colors cursor-pointer hover:opacity-100"
+                  style={{ color: sub }}
+                >
+                  {l.label}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
 
-        {/* Dining Hours */}
+        {/* Contact */}
         <div>
-          <h4 className="font-serif-luxury text-[#f7f4ec] font-bold text-sm uppercase tracking-wider mb-4">Operating Hours</h4>
-          <ul className="space-y-2 text-xs sm:text-sm text-[#ded7c8]">
-            <li className="flex justify-between">
-              <span>Tuesday – Sunday</span>
-              <span className="font-semibold text-[#f7f4ec]">11:30 AM – 10:00 PM</span>
-            </li>
-            <li className="flex justify-between text-amber-300/80">
-              <span>Monday</span>
-              <span className="font-semibold">Closed (Private Events)</span>
-            </li>
-            <li className="pt-2 text-xs text-[#a3b8ad]">
-              Lunch Service: 11:30 AM – 3:00 PM<br />
-              Dinner Service: 5:00 PM – 10:00 PM
-            </li>
-          </ul>
-        </div>
-
-        {/* Contact & Address */}
-        <div>
-          <h4 className="font-serif-luxury text-[#f7f4ec] font-bold text-sm uppercase tracking-wider mb-4">Devon House Location</h4>
-          <address className="not-italic space-y-3 text-xs sm:text-sm">
-            <div className="flex items-start space-x-2.5">
-              <MapPin className="w-4 h-4 text-[#c5a059] shrink-0 mt-0.5" aria-hidden="true" />
-              <span className="text-[#ded7c8]">
-                Devon House, 26 Hope Road<br />
-                Kingston 10, Jamaica, W.I.
-              </span>
+          <h4 className="text-[10px] font-bold tracking-[0.25em] uppercase mb-5" style={{ color: acc }}>
+            Visit Us
+          </h4>
+          <address className="not-italic space-y-3 text-xs" style={{ color: sub }}>
+            <div className="flex items-start gap-2.5">
+              <MapPin className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: acc }} />
+              <span>Devon House, 26 Hope Road<br />Kingston 10, Jamaica, W.I.</span>
             </div>
-            <div className="flex items-center space-x-2.5">
-              <Phone className="w-4 h-4 text-[#c5a059] shrink-0" aria-hidden="true" />
-              <a 
-                href={`tel:${BUSINESS_INFO.phone.replace(/[^0-9]/g, '')}`} 
-                className="text-[#f7f4ec] hover:text-[#c5a059] font-semibold transition"
-              >
-                {BUSINESS_INFO.phone}
-              </a>
-            </div>
-            <div className="flex items-center space-x-2.5">
-              <Mail className="w-4 h-4 text-[#c5a059] shrink-0" aria-hidden="true" />
-              <a 
-                href={`mailto:${BUSINESS_INFO.email}`} 
-                className="text-[#ded7c8] hover:text-[#c5a059] transition"
-              >
-                {BUSINESS_INFO.email}
-              </a>
-            </div>
-            <a
-              href={BUSINESS_INFO.googleMapsLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center text-[#c5a059] hover:text-[#e2c585] font-semibold pt-1"
-            >
-              <span>View On Google Maps</span>
-              <ChevronRight className="w-3.5 h-3.5 ml-1" />
+            <a href={`tel:${BUSINESS_INFO.phone.replace(/[^0-9]/g,'')}`} className="flex items-center gap-2.5 hover:opacity-100 transition-opacity">
+              <Phone className="w-3.5 h-3.5 flex-shrink-0" style={{ color: acc }} />
+              {BUSINESS_INFO.phone}
             </a>
+            <a href={`mailto:${BUSINESS_INFO.email}`} className="flex items-center gap-2.5 hover:opacity-100 transition-opacity">
+              <Mail className="w-3.5 h-3.5 flex-shrink-0" style={{ color: acc }} />
+              {BUSINESS_INFO.email}
+            </a>
+            <div className="text-[10px] leading-relaxed pt-1">
+              Tue–Sun: 11:30 AM – 10:00 PM<br />
+              <span style={{ color: 'rgba(255,166,100,0.6)' }}>Mon: Closed</span>
+            </div>
           </address>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-[#1d382b] py-6 px-4 text-center text-xs text-[#a3b8ad]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span>© {new Date().getFullYear()} {BUSINESS_INFO.legalName}. All rights reserved.</span>
-          <div className="flex items-center space-x-4">
-            <span>Devon House, Kingston, Jamaica</span>
-            <span>•</span>
+      {/* Bottom bar */}
+      <div className="px-5 py-5" style={{ borderTop: `1px solid ${bdr}` }}>
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[10px]" style={{ color: 'rgba(255,255,255,0.25)' }}>
+          <span>© {new Date().getFullYear()} The Steak House on The Verandah. All rights reserved.</span>
+          <div className="flex items-center gap-4">
+            <span>Devon House · Kingston, Jamaica</span>
             <button
               onClick={() => onNavigate('admin')}
-              className="text-[#a3b8ad] hover:text-[#c5a059] transition underline underline-offset-2 cursor-pointer"
+              className="hover:opacity-70 transition-opacity underline underline-offset-2 cursor-pointer"
             >
-              Maitre D' & Admin Portal
+              Maître D' Portal
             </button>
           </div>
         </div>

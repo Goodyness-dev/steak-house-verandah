@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeOff, Utensils, AlertCircle, ArrowLeft, Loader2, ShieldCheck, Sparkles } from '../common/Icons';
+import { Lock, Eye, EyeOff, AlertCircle, ArrowLeft, Loader2, VerandahLogo, Key } from '../common/Icons';
 import { authApi } from '../../services/api';
 import { BUSINESS_INFO } from '../../data/businessData';
+
+const DEMO_PASSWORD = 'verandah2024';
 
 export default function AdminLogin({ onLoginSuccess, onBackToSite }) {
   const [password, setPassword] = useState('');
@@ -11,128 +13,153 @@ export default function AdminLogin({ onLoginSuccess, onBackToSite }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!password.trim()) {
-      setError('Please enter your concierge passkey.');
-      return;
-    }
-
+    if (!password.trim()) { setError('Enter your access key.'); return; }
     setIsLoading(true);
     setError('');
-
     try {
       const result = await authApi.login(password);
-      if (result.success) {
-        onLoginSuccess(result.user);
-      } else {
-        setError(result.error || 'Invalid credentials.');
-      }
+      if (result.success) onLoginSuccess(result.user);
+      else setError(result.error || 'Invalid access key.');
     } catch (err) {
-      setError(err.data?.error || err.message || 'Login failed. Please verify credentials.');
+      setError(err.data?.error || err.message || 'Login failed. Check your credentials.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#0d1e16] text-[#ded7c8] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden font-sans">
-      {/* Background Subtle Accent Gradients */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#c5a059]/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#183327]/60 rounded-full blur-2xl pointer-events-none" />
+  const autofill = () => setPassword(DEMO_PASSWORD);
+  const copyKey = () => { navigator.clipboard.writeText(DEMO_PASSWORD); };
 
-      {/* Back to Site Button */}
-      <div className="w-full max-w-md mb-6 z-10">
+  return (
+    <div className="min-h-screen bg-[#0c0c0c] text-[#f7f4ec] flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden font-sans">
+      {/* Subtle ambient glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse, rgba(184,149,90,0.07) 0%, transparent 70%)' }} />
+
+      {/* Back to site */}
+      <div className="w-full max-w-sm mb-8 z-10">
         <button
           onClick={onBackToSite}
-          className="inline-flex items-center space-x-2 text-xs sm:text-sm font-bold text-[#c5a059] hover:text-white transition px-4 py-2 rounded-xl bg-[#142a20] border border-[#c5a059]/30 hover:border-[#c5a059] cursor-pointer"
+          className="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.2em] uppercase text-white/40 hover:text-white/70 transition cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4 text-[#c5a059]" />
-          <span>Return to Verandah Guest Website</span>
+          <ArrowLeft className="w-3.5 h-3.5" />
+          Back to Verandah
         </button>
       </div>
 
-      {/* Login Card */}
-      <div className="w-full max-w-md bg-[#142a20] border-2 border-[#c5a059]/40 rounded-3xl p-8 sm:p-10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_40px_rgba(197,160,89,0.15)] relative z-10">
-        {/* Brand Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#183327] border-2 border-[#c5a059]/50 text-[#c5a059] mb-4 shadow-lg shadow-[#c5a059]/20">
-            <Utensils className="w-8 h-8" />
+      {/* Login card */}
+      <div
+        className="w-full max-w-sm z-10 rounded-2xl p-8 sm:p-10"
+        style={{
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          boxShadow: '0 40px 80px rgba(0,0,0,0.6)',
+        }}
+      >
+        {/* Brand */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full mb-5"
+            style={{ border: '1px solid rgba(197,160,89,0.4)', background: 'rgba(197,160,89,0.06)' }}>
+            <VerandahLogo className="w-7 h-7 text-[#c5a059]" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">
-            Estate Concierge
+          <h1 className="font-serif text-2xl font-bold tracking-tight text-white">
+            Maître D' Portal
           </h1>
-          <p className="text-xs uppercase tracking-widest text-[#c5a059] font-semibold mt-1">
-            Devon House · Kingston 10, Jamaica
+          <p className="text-[10px] tracking-[0.25em] uppercase font-medium mt-1 text-[#c5a059]">
+            The Steak House on The Verandah
           </p>
-          <p className="text-xs text-[#ded7c8]/60 mt-2">
-            Maître d' management portal for table reservations, wine cellar inquiries, and guest preferences.
+          <p className="text-xs text-white/35 mt-3 leading-relaxed">
+            Reservation management · Guest inbox · Dashboard
           </p>
         </div>
 
-        {/* Error Alert */}
+        {/* Credential hint */}
+        <div className="mb-6 p-4 rounded-xl" style={{ background: 'rgba(197,160,89,0.07)', border: '1px solid rgba(197,160,89,0.2)' }}>
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <Key className="w-3.5 h-3.5 text-[#c5a059]" />
+              <span className="text-[10px] font-bold tracking-widest uppercase text-[#c5a059]">Demo Access Key</span>
+            </div>
+          </div>
+          <code className="text-sm text-white font-mono block mb-3">{DEMO_PASSWORD}</code>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={autofill}
+              className="flex-1 py-1.5 text-[10px] font-bold tracking-wider uppercase rounded-lg cursor-pointer transition-opacity hover:opacity-80"
+              style={{ background: '#c5a059', color: '#0c0c0c' }}
+            >
+              Autofill
+            </button>
+            <button
+              type="button"
+              onClick={copyKey}
+              className="flex-1 py-1.5 text-[10px] font-bold tracking-wider uppercase rounded-lg cursor-pointer transition-opacity hover:opacity-80"
+              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.08)' }}
+            >
+              Copy
+            </button>
+          </div>
+        </div>
+
+        {/* Error */}
         {error && (
-          <div className="mb-6 p-4 rounded-2xl bg-red-950/60 border border-red-500/40 flex items-start space-x-3 text-red-200 text-xs">
-            <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-            <span>{error}</span>
+          <div className="mb-5 p-3.5 rounded-xl flex items-start gap-3 text-xs text-red-300"
+            style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+            <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+            {error}
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-xs uppercase tracking-widest text-[#c5a059] font-bold mb-2">
-              Concierge Passkey
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#c5a059]/60">
-                <Lock className="w-4 h-4" />
-              </div>
-              <input
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter access credentials..."
-                className="w-full bg-[#0d1e16] border border-[#c5a059]/30 focus:border-[#c5a059] rounded-2xl pl-11 pr-12 py-3 text-sm text-white placeholder:text-[#ded7c8]/40 outline-none transition"
-                required
-                autoFocus
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-[#c5a059]/60 hover:text-[#c5a059] cursor-pointer"
-              >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </button>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+              <Lock className="w-4 h-4 text-white/30" />
             </div>
-            <p className="text-[11px] text-[#ded7c8]/50 mt-2">
-              Default demo credential: <code className="text-[#c5a059] font-mono font-bold">admin123</code>
-            </p>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Access key"
+              autoComplete="current-password"
+              className="w-full py-3.5 pl-11 pr-12 rounded-xl text-sm text-white placeholder-white/25 outline-none transition-all"
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.1)',
+              }}
+              onFocus={e => e.target.style.borderColor = 'rgba(197,160,89,0.6)'}
+              onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 cursor-pointer"
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 bg-[#c5a059] hover:bg-[#d8b46e] text-[#0d1e16] font-bold text-xs uppercase tracking-widest rounded-2xl transition shadow-[0_0_20px_rgba(197,160,89,0.3)] flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
+            className="w-full py-3.5 rounded-xl font-bold text-sm tracking-wide transition-all cursor-pointer disabled:opacity-50"
+            style={{ background: '#c5a059', color: '#0c0c0c' }}
           >
             {isLoading ? (
-              <>
+              <span className="flex items-center justify-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Authenticating...</span>
-              </>
+                Verifying…
+              </span>
             ) : (
-              <>
-                <ShieldCheck className="w-4 h-4" />
-                <span>Enter Concierge Portal</span>
-              </>
+              'Enter Portal'
             )}
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-[#c5a059]/20 text-center">
-          <p className="text-[11px] text-[#ded7c8]/60 flex items-center justify-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-[#c5a059]" />
-            <span>1881 George Stiebel Heritage Estate · All Rights Reserved</span>
-          </p>
-        </div>
+        <p className="text-center text-[10px] text-white/20 mt-6">
+          {BUSINESS_INFO.address} · {BUSINESS_INFO.phone}
+        </p>
       </div>
     </div>
   );

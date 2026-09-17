@@ -1,66 +1,269 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── CSS VARIABLES ──────────────────────────────────────────────── */
 @layer base {
   :root {
-    color-scheme: dark;
-    background-color: #0d1e16;
-  }
-  
-  html {
-    background-color: #0d1e16 !important;
-    color: #f7f4ec !important;
+    --ink:        #0d0d0d;
+    --ink-soft:   #1a1a1a;
+    --paper:      #f5f0e8;
+    --paper-warm: #ece5d6;
+    --bone:       #d4c9b0;
+    --gold:       #b8955a;
+    --gold-light: #d4af37;
+    --gold-muted: #8a6e3a;
+    --charcoal:   #2a2a2a;
+    --mid:        #555;
+    --light-line: rgba(0,0,0,0.10);
     scroll-behavior: smooth;
   }
 
+  /* ── Dark mode overrides ── */
+  .dark {
+    --ink:        #f7f4ec;
+    --ink-soft:   #ded7c8;
+    --paper:      #0c0c0c;
+    --paper-warm: #111111;
+    --bone:       #3a3430;
+    --gold:       #c5a059;
+    --gold-light: #e2c585;
+    --gold-muted: #9d7a36;
+    --charcoal:   #c8bfb0;
+    --mid:        #a09080;
+    --light-line: rgba(255,255,255,0.08);
+  }
+
+  html {
+    background-color: var(--paper);
+    color: var(--ink);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply bg-[#0d1e16] text-[#f7f4ec] antialiased overflow-x-hidden transition-colors duration-200;
+    @apply antialiased overflow-x-hidden transition-colors duration-300;
+    background-color: var(--paper);
+    color: var(--ink);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Clean luxury scrollbar */
-  ::-webkit-scrollbar {
-    width: 7px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0a1711;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #254a37;
-    border-radius: 4px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #c5a059;
-  }
+  /* ── Luxury scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--paper-warm); }
+  ::-webkit-scrollbar-thumb { background: var(--bone); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ── Selection ── */
+  ::selection { background: var(--gold); color: #fff; }
 }
 
+/* ─── COMPONENT UTILITIES ────────────────────────────────────────── */
 @layer components {
+
+  /* Thick tactile card – light + dark adaptive */
   .card-thick {
-    @apply bg-[#142a20]/95 backdrop-blur-md border-2 border-[#284d3b]/80 rounded-3xl transition-all duration-300;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(20, 42, 32, 0.4);
+    background: color-mix(in srgb, var(--paper-warm) 95%, transparent);
+    border: 1px solid var(--light-line);
+    border-radius: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow:
+      0 2px 6px rgba(0,0,0,0.04),
+      0 12px 40px rgba(0,0,0,0.07),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .dark .card-thick {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.06);
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.5),
+      0 0 20px rgba(20,42,32,0.4);
   }
 
   .card-thick-hover {
-    @apply bg-[#142a20]/95 backdrop-blur-md border-2 border-[#284d3b]/80 rounded-3xl transition-all duration-300;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(20, 42, 32, 0.4);
-  }
-  .card-thick-hover:hover {
-    @apply border-[#c5a059]/70 -translate-y-1;
-    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 30px 2px rgba(197, 160, 89, 0.18);
+    background: color-mix(in srgb, var(--paper-warm) 95%, transparent);
+    border: 1px solid var(--light-line);
+    border-radius: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow:
+      0 2px 6px rgba(0,0,0,0.04),
+      0 12px 40px rgba(0,0,0,0.07),
+      inset 0 1px 0 rgba(255,255,255,0.5);
   }
 
+  .dark .card-thick-hover {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.06);
+    box-shadow:
+      0 10px 30px rgba(0,0,0,0.5),
+      0 0 20px rgba(20,42,32,0.4);
+  }
+
+  .card-thick-hover:hover {
+    transform: translateY(-3px);
+    border-color: var(--gold);
+    box-shadow:
+      0 4px 16px rgba(0,0,0,0.08),
+      0 24px 60px rgba(0,0,0,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+
+  .dark .card-thick-hover:hover {
+    border-color: rgba(197,160,89,0.5);
+    box-shadow:
+      0 20px 40px rgba(0,0,0,0.7),
+      0 0 30px 2px rgba(197,160,89,0.15);
+  }
+
+  /* Typography utilities */
+  .font-serif-luxury {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-feature-settings: "ss01", "ss02";
+  }
+  .font-cursive-accent {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+  }
+
+  /* Dotted price line (Gilded Grill menu layout) */
+  .dotted-price-line {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+  }
+  .dotted-price-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--bone) 0px,
+      var(--bone) 3px,
+      transparent 3px,
+      transparent 8px
+    );
+    margin: 0 8px;
+    position: relative;
+    top: -3px;
+    opacity: 0.5;
+  }
+
+  /* Section rule line (draw-in via GSAP) */
+  .section-rule {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 0.75rem auto 0;
+    transition: width 0.8s ease;
+  }
+
+  /* Pill button (reserve now style) */
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2.25rem;
+    border: 1.5px solid var(--ink);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+  .btn-pill:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .dark .btn-pill {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .dark .btn-pill:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* Gold pill CTA */
+  .btn-pill-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2.25rem;
+    border: 1.5px solid var(--gold);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .btn-pill-gold:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+    transform: scale(1.02);
+  }
+
+  /* GSAP clip-reveal target */
+  .clip-reveal {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  /* Magnetic hover container */
+  .magnetic-wrap {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+  }
+
+  /* Overlay gradient for hero/CTA photo */
+  .photo-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.15) 0%,
+      rgba(0,0,0,0.45) 60%,
+      rgba(0,0,0,0.72) 100%
+    );
+  }
+
+  /* Thin label (Gilded Grill micro-tag) */
+  .micro-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* Admin card (dark always) */
+  .admin-card {
+    @apply rounded-2xl transition-all duration-200;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .admin-card:hover {
+    border-color: rgba(197,160,89,0.3);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+
+  /* Gold glow utility */
   .gold-glow {
     box-shadow: 0 0 25px rgba(197, 160, 89, 0.35);
   }
+}
 
-  .font-serif-luxury {
-    font-family: 'Playfair Display', Georgia, serif;
-  }
-
-  .font-cursive-accent {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-  }
+/* ─── GSAP ANIMATION HELPERS ─────────────────────────────────────── */
+@layer utilities {
+  .will-animate { will-change: transform, opacity; }
+  .overflow-clip { overflow: clip; }
 }
