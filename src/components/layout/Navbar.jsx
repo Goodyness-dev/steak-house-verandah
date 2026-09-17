@@ -65,6 +65,11 @@ export default function Navbar({ onOpenWizard, currentPage = 'home', onNavigate,
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
+    if (target === 'admin') {
+      if (onNavigate) onNavigate('admin');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     if (currentPage !== 'home' && onNavigate) {
       onNavigate('home');
       setTimeout(() => {
@@ -83,6 +88,7 @@ export default function Navbar({ onOpenWizard, currentPage = 'home', onNavigate,
     { name: 'Heritage',  target: '#about' },
     { name: 'Location',  target: '#location' },
     { name: 'Reviews',   target: '#reviews' },
+    { name: 'Portal',    target: 'admin' },
   ];
 
   return (

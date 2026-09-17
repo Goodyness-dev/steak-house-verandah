@@ -63,24 +63,36 @@ export default function App() {
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash === '#/admin' || hash === '#admin') setCurrentPage('admin');
-      else if (hash === '#/services' || hash === '#services-all') setCurrentPage('services');
-      else setCurrentPage('home');
+    const checkRoute = () => {
+      const hash = (window.location.hash || '').toLowerCase();
+      const path = (window.location.pathname || '').toLowerCase().replace(/\/$/, '');
+      if (hash === '#/admin' || hash === '#admin' || path === '/admin') {
+        setCurrentPage('admin');
+      } else if (hash === '#/services' || hash === '#services' || path === '/services') {
+        setCurrentPage('services');
+      } else {
+        setCurrentPage('home');
+      }
     };
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    checkRoute();
+    window.addEventListener('hashchange', checkRoute);
+    window.addEventListener('popstate', checkRoute);
+    return () => {
+      window.removeEventListener('hashchange', checkRoute);
+      window.removeEventListener('popstate', checkRoute);
+    };
   }, []);
 
   const handleNavigate = (page) => {
     setCurrentPage(page);
-    if (page === 'services') window.location.hash = '#/services';
-    else if (page === 'admin') window.location.hash = '#/admin';
-    else {
-      if (window.location.hash.startsWith('#/services') || window.location.hash.startsWith('#/admin')) {
-        window.history.pushState(null, '', window.location.pathname);
+    if (page === 'services') {
+      window.location.hash = '#/services';
+    } else if (page === 'admin') {
+      window.location.hash = '#/admin';
+    } else {
+      window.location.hash = '';
+      if (window.location.pathname !== '/') {
+        window.history.pushState(null, '', '/');
       }
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -141,7 +153,7 @@ export default function App() {
           />
         ) : (
           <>
-            <Hero onOpenWizard={handleOpenWizard} darkMode={dm} />
+            <Hero onOpenWizard={handleOpenWizard} darkMode={dm} onToggleDarkMode={toggleDarkMode} />
             <ServicesSection
               onOpenWizard={handleOpenWizard}
               onViewAllServices={() => handleNavigate('services')}

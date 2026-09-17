@@ -118,12 +118,16 @@ export default function Footer({ onOpenWizard, onNavigate, darkMode }) {
           <span>© {new Date().getFullYear()} The Steak House on The Verandah. All rights reserved.</span>
           <div className="flex items-center gap-4">
             <span>Devon House · Kingston, Jamaica</span>
-            <button
-              onClick={() => onNavigate('admin')}
+            <a
+              href="#/admin"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('admin');
+              }}
               className="hover:opacity-70 transition-opacity underline underline-offset-2 cursor-pointer"
             >
               Maître D' Portal
-            </button>
+            </a>
           </div>
         </div>
       </div>
